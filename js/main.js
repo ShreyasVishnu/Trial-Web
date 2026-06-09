@@ -54,46 +54,6 @@ function initPageAnimations() {
   });
 }
 
-function initSideDial() {
-  const dial = $('.side-dial');
-  if (!dial) return;
-
-  const dots = $$('.side-dial__dot', dial);
-  const targets = dots
-    .map(dot => {
-      const id = dot.dataset.target;
-      const el = id ? document.getElementById(id) : null;
-      return el ? { dot, el } : null;
-    })
-    .filter(Boolean);
-
-  if (!targets.length) return;
-
-  dots.forEach(dot => {
-    dot.addEventListener('click', () => {
-      const id = dot.dataset.target;
-      const el = id ? document.getElementById(id) : null;
-      if (!el) return;
-      const headerOffset = (document.querySelector('.header')?.offsetHeight || 0) + 16;
-      const top = el.getBoundingClientRect().top + window.scrollY - headerOffset;
-      window.scrollTo({ top, behavior: 'smooth' });
-    });
-  });
-
-  const observer = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-      const match = targets.find(t => t.el === entry.target);
-      if (!match) return;
-      if (entry.isIntersecting) {
-        dots.forEach(d => d.classList.remove('side-dial__dot--active'));
-        match.dot.classList.add('side-dial__dot--active');
-      }
-    });
-  }, { rootMargin: '-30% 0px -55% 0px', threshold: 0 });
-
-  targets.forEach(t => observer.observe(t.el));
-}
-
 function initContactForm() {
   const form = $('#contact-form');
   if (!form) return;
@@ -129,7 +89,6 @@ onReady(() => {
   initContactForm();
   renderHighlights();
   renderGoals();
-  initSideDial();
   initHeroCounters();
   initPageAnimations();
 });
