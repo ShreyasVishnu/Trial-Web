@@ -16,11 +16,11 @@ export const highlights = [
 ];
 
 export const upcoming = [
-  { date: '2026-08-15', label: 'Aug 2026', title: 'Senior Year Begins', detail: 'Final year at Clear Lake High School — focus on college applications and research publication.' },
+  { date: '2026-08-15', label: 'Aug 2026', title: 'Junior Year Begins', detail: '11th grade at Clear Lake High School — focus on college preparation, research, and continued service.' },
   { date: '2026-10-01', label: 'Fall 2026', title: 'Submit Research Paper', detail: 'Write and submit the Year 2 lung cancer cytotoxicity study for publication in a student science journal.' },
   { date: '2026-11-15', label: 'Nov 2026', title: 'Eagle Scout Rank', detail: 'Complete remaining merit badges and leadership service project to achieve the highest rank in Boy Scouts.' },
   { date: '2027-02-01', label: 'Spring 2027', title: 'HOSA Nationals', detail: 'Advance through state competition to qualify for the HOSA International Leadership Conference.' },
-  { date: '2027-06-01', label: 'Summer 2027', title: '200+ Volunteer Hours', detail: 'Continue hospital volunteering and community service to reach 200+ total hours before senior year ends.' }
+  { date: '2027-06-01', label: 'Summer 2027', title: '200+ Volunteer Hours', detail: 'Continue hospital volunteering and community service to reach 200+ total hours before junior year ends.' }
 ];
 
 export function typeLabel(t) {

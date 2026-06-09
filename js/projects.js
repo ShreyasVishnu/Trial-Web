@@ -92,7 +92,7 @@ const volunteerActivities = [
     icon: '🌿'
   },
   {
-    title: 'Helen Hallel Public Library',
+    title: 'Hellen Hall Public Library',
     tag: 'Community Service · 10 Hours',
     description: 'Volunteered at the local library, supporting community programs and library operations.',
     icon: '📚'
