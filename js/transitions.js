@@ -2,9 +2,6 @@ const TAB_ORDER = ['index.html', 'about.html', 'extracurriculars.html', 'contact
 const DURATIONS = [0, 350, 480, 620];
 
 export function initTransitions() {
-  const bar = createGlassBar();
-  document.body.appendChild(bar);
-
   const main = document.querySelector('main');
   let transitioning = false;
 
@@ -12,7 +9,6 @@ export function initTransitions() {
   if (savedDir) {
     sessionStorage.removeItem('pg-dir');
     if (main) main.classList.add(`page-enter--${savedDir}`);
-    bar.classList.add(`glass-bar--enter-${savedDir}`);
   }
 
   document.addEventListener('click', (e) => {
@@ -20,6 +16,8 @@ export function initTransitions() {
 
     const link = e.target.closest('a');
     if (!link) return;
+
+    if (link.closest('.nav__links')) return;
 
     const href = link.getAttribute('href');
     if (!href) return;
@@ -53,19 +51,9 @@ export function initTransitions() {
       main.classList.add(`page-exit--${dir}`);
     }
 
-    bar.style.setProperty('--bar-dur', `${dur}ms`);
-    bar.classList.add(`glass-bar--exit-${dir}`);
-
     setTimeout(() => {
       sessionStorage.setItem('pg-dir', dir);
       window.location.href = href;
     }, dur);
   });
-}
-
-function createGlassBar() {
-  const el = document.createElement('div');
-  el.className = 'glass-bar';
-  el.setAttribute('aria-hidden', 'true');
-  return el;
 }

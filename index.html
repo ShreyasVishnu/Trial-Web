@@ -10,17 +10,31 @@
 <body>
     <header class="header">
         <nav class="nav container">
-            <a href="index.html" class="nav__logo">Shreyas Bishnu</a>
+            <a href="index.html" class="nav__logo" aria-label="Shreyas Bishnu — Home">
+                <span class="nav__logo-mark" aria-hidden="true">SB</span>
+            </a>
             <ul class="nav__links">
                 <li><a class="nav__link nav__link--active" href="index.html">Home</a></li>
                 <li><a class="nav__link" href="about.html">About</a></li>
                 <li><a class="nav__link" href="extracurriculars.html">Extracurriculars</a></li>
                 <li><a class="nav__link" href="contact.html">Contact</a></li>
-                <li><a class="nav__link" href="index.html#calendar">Calendar</a></li>
+                <li class="nav__divider" aria-hidden="true"></li>
                 <li>
                     <button class="theme-toggle" id="theme-toggle" aria-label="Toggle dark mode">
-                        <span class="theme-toggle__icon theme-toggle__icon--sun">☀️</span>
-                        <span class="theme-toggle__icon theme-toggle__icon--moon">🌙</span>
+                        <svg class="theme-toggle__icon theme-toggle__icon--sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="square" stroke-linejoin="miter" aria-hidden="true">
+                            <circle cx="12" cy="12" r="4"/>
+                            <line x1="12" y1="2" x2="12" y2="5"/>
+                            <line x1="12" y1="19" x2="12" y2="22"/>
+                            <line x1="2" y1="12" x2="5" y2="12"/>
+                            <line x1="19" y1="12" x2="22" y2="12"/>
+                            <line x1="4.93" y1="4.93" x2="7.05" y2="7.05"/>
+                            <line x1="16.95" y1="16.95" x2="19.07" y2="19.07"/>
+                            <line x1="4.93" y1="19.07" x2="7.05" y2="16.95"/>
+                            <line x1="16.95" y1="7.05" x2="19.07" y2="4.93"/>
+                        </svg>
+                        <svg class="theme-toggle__icon theme-toggle__icon--moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="square" stroke-linejoin="miter" aria-hidden="true">
+                            <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+                        </svg>
                     </button>
                 </li>
             </ul>
@@ -37,7 +51,7 @@
                         <span class="hero__gradient-text">Shreyas Bishnu</span>
                     </a>
                 </h1>
-                <p class="hero__subtitle">Sophomore at Clear Lake High School · Researcher · Volunteer · Future healthcare professional</p>
+                <p class="hero__subtitle">Rising Junior at Clear Lake High School · Researcher · Volunteer · Future healthcare professional</p>
                 <div class="hero__cta-group">
                     <a href="extracurriculars.html" class="hero__cta">Explore My Work</a>
                     <a href="contact.html" class="hero__cta hero__cta--secondary">Get in Touch</a>
@@ -49,7 +63,7 @@
                     </div>
                     <div class="stat">
                         <span class="stat__number" id="hours-count">0</span>
-                        <span class="stat__label">Volunteer Hours</span>
+                        <span class="stat__label">Volunteer + Lab Hours</span>
                     </div>
                     <div class="stat">
                         <span class="stat__number" id="awards-count">0</span>
@@ -61,9 +75,10 @@
 
         <section class="section section--alt" id="calendar">
             <div class="container">
-                <h2 class="section__title">Calendar</h2>
-                <p class="section__subtitle">Stay on track with my schedule</p>
+                <h2 class="section__title">Highlights & Schedule</h2>
+                <p class="section__subtitle">Milestones, events, and what's coming up</p>
                 <div class="calendar" id="calendar-container"></div>
+                <div class="calendar__detail" id="calendar-detail"></div>
             </div>
         </section>
 

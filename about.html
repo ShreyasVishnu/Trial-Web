@@ -10,17 +10,31 @@
 <body>
     <header class="header">
         <nav class="nav container">
-            <a href="index.html" class="nav__logo">Shreyas Bishnu</a>
+            <a href="index.html" class="nav__logo" aria-label="Shreyas Bishnu — Home">
+                <span class="nav__logo-mark" aria-hidden="true">SB</span>
+            </a>
             <ul class="nav__links">
                 <li><a class="nav__link" href="index.html">Home</a></li>
                 <li><a class="nav__link nav__link--active" href="about.html">About</a></li>
                 <li><a class="nav__link" href="extracurriculars.html">Extracurriculars</a></li>
                 <li><a class="nav__link" href="contact.html">Contact</a></li>
-                <li><a class="nav__link" href="index.html#calendar">Calendar</a></li>
+                <li class="nav__divider" aria-hidden="true"></li>
                 <li>
                     <button class="theme-toggle" id="theme-toggle" aria-label="Toggle dark mode">
-                        <span class="theme-toggle__icon theme-toggle__icon--sun">☀️</span>
-                        <span class="theme-toggle__icon theme-toggle__icon--moon">🌙</span>
+                        <svg class="theme-toggle__icon theme-toggle__icon--sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="square" stroke-linejoin="miter" aria-hidden="true">
+                            <circle cx="12" cy="12" r="4"/>
+                            <line x1="12" y1="2" x2="12" y2="5"/>
+                            <line x1="12" y1="19" x2="12" y2="22"/>
+                            <line x1="2" y1="12" x2="5" y2="12"/>
+                            <line x1="19" y1="12" x2="22" y2="12"/>
+                            <line x1="4.93" y1="4.93" x2="7.05" y2="7.05"/>
+                            <line x1="16.95" y1="16.95" x2="19.07" y2="19.07"/>
+                            <line x1="4.93" y1="19.07" x2="7.05" y2="16.95"/>
+                            <line x1="16.95" y1="7.05" x2="19.07" y2="4.93"/>
+                        </svg>
+                        <svg class="theme-toggle__icon theme-toggle__icon--moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="square" stroke-linejoin="miter" aria-hidden="true">
+                            <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+                        </svg>
                     </button>
                 </li>
             </ul>
@@ -34,7 +48,9 @@
                 <div class="profile">
                     <div class="profile__card">
                         <div class="profile__image">
-                            <div class="profile__avatar">SB</div>
+                            <div class="profile__avatar profile__avatar--photo">
+                                <img src="assets/images/pfp.jpeg" alt="Shreyas Bishnu">
+                            </div>
                         </div>
                         <div class="profile__info">
                             <h3 class="profile__name">Shreyas Bishnu</h3>
