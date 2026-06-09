@@ -748,58 +748,48 @@ main {
 /* ---- Timeline (Highlights) ---- */
 
 .timeline {
-  position: relative;
-  max-width: 880px;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--spacing-4);
+  max-width: 1100px;
   margin: 0 auto;
-  padding: var(--spacing-4) 0;
+  padding: var(--spacing-2) 0;
 
-  &::before {
-    content: '';
-    position: absolute;
-    left: 72px;
-    top: var(--spacing-6);
-    bottom: var(--spacing-6);
-    width: 1px;
-    background: var(--color-border);
+  @media (max-width: 900px) {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  @media (max-width: 560px) {
+    grid-template-columns: 1fr;
   }
 }
 
 .highlight {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  padding: var(--spacing-4) var(--spacing-5);
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-2);
   position: relative;
-  display: grid;
-  grid-template-columns: 80px 1fr;
-  gap: var(--spacing-6);
-  padding: var(--spacing-5) 0;
-  align-items: start;
   opacity: 0;
-  transform: translateY(12px);
-  animation: fadeInUp 0.5s ease-out forwards;
+  transform: translateY(10px);
+  animation: fadeInUp 0.45s ease-out forwards;
   animation-delay: var(--delay, 0s);
+  transition: border-color var(--transition-base), transform var(--transition-base);
 
-  &::after {
-    content: '';
-    position: absolute;
-    left: 68px;
-    top: calc(var(--spacing-5) + 18px);
-    width: 9px;
-    height: 9px;
-    border-radius: 50%;
-    background: var(--color-text);
-    box-shadow: 0 0 0 3px var(--color-background), 0 0 0 4px var(--color-border);
-  }
-
-  & + .highlight {
-    border-top: 1px solid var(--color-border);
+  &:hover {
+    border-color: var(--color-text);
   }
 }
 
 .highlight__date {
   display: flex;
-  flex-direction: column;
-  align-items: center;
-  text-align: center;
-  padding-top: 2px;
+  align-items: baseline;
+  gap: 6px;
   line-height: 1;
+  margin-bottom: 2px;
 }
 
 .highlight__month {
@@ -808,14 +798,13 @@ main {
   color: var(--color-text-muted);
   letter-spacing: 1px;
   text-transform: uppercase;
-  margin-bottom: 4px;
 }
 
 .highlight__day {
-  font-size: var(--font-size-2xl);
+  font-size: var(--font-size-lg);
   font-weight: 800;
   color: var(--color-text);
-  letter-spacing: -1px;
+  letter-spacing: -0.5px;
   line-height: 1;
 }
 
@@ -824,21 +813,20 @@ main {
   color: var(--color-text-muted);
   font-weight: 600;
   letter-spacing: 0.5px;
-  margin-top: 4px;
+  margin-left: auto;
 }
 
 .highlight__body {
   display: flex;
   flex-direction: column;
   gap: var(--spacing-2);
-  padding-left: var(--spacing-4);
 }
 
 .highlight__tag {
   display: inline-block;
   align-self: flex-start;
-  padding: 3px 10px;
-  font-size: 0.625rem;
+  padding: 2px 9px;
+  font-size: 0.6rem;
   font-weight: 700;
   letter-spacing: 0.5px;
   text-transform: uppercase;
@@ -846,6 +834,7 @@ main {
   background: var(--color-surface-elevated);
   color: var(--color-text);
   border-radius: var(--radius-full);
+  margin-bottom: 2px;
 }
 
 .highlight__tag--milestone { color: var(--color-text); border-color: var(--color-text); }
@@ -854,10 +843,10 @@ main {
 .highlight__tag--event { color: var(--color-primary); border-color: var(--color-primary); }
 
 .highlight__title {
-  font-size: var(--font-size-lg);
+  font-size: var(--font-size-base);
   font-weight: 700;
   color: var(--color-text);
-  letter-spacing: -0.3px;
+  letter-spacing: -0.2px;
   line-height: 1.3;
   margin: 0;
 }
@@ -865,28 +854,8 @@ main {
 .highlight__detail {
   font-size: var(--font-size-sm);
   color: var(--color-text-secondary);
-  line-height: 1.6;
+  line-height: 1.55;
   margin: 0;
-  max-width: 600px;
-}
-
-@media (max-width: 600px) {
-  .timeline::before {
-    left: 56px;
-  }
-
-  .highlight {
-    grid-template-columns: 60px 1fr;
-    gap: var(--spacing-4);
-  }
-
-  .highlight::after {
-    left: 52px;
-  }
-
-  .highlight__day {
-    font-size: var(--font-size-xl);
-  }
 }
 
 .goals {
