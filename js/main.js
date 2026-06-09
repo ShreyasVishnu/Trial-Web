@@ -2,9 +2,38 @@ import { onReady, observeVisibility, animateCount, $ } from './utils.js';
 import { initNavigation } from './navigation.js';
 import { initTheme } from './theme.js';
 import { initParticles } from './particles.js';
-import { initCalendar, upcoming } from './calendar.js';
 import { initExtracurriculars } from './extracurriculars.js';
 import { initTransitions } from './transitions.js';
+import { highlights, upcoming, typeLabel } from './calendar.js';
+
+function renderHighlights() {
+  const container = $('#highlights-container');
+  if (!container) return;
+
+  const monthFmt = new Intl.DateTimeFormat('en-US', { month: 'short' });
+  const items = highlights.map((h, i) => {
+    const d = new Date(h.date + 'T00:00:00');
+    const month = monthFmt.format(d).toUpperCase();
+    const day = d.getDate();
+    const year = d.getFullYear();
+    return `
+      <article class="highlight" style="--delay:${i * 0.05}s">
+        <div class="highlight__date">
+          <span class="highlight__month">${month}</span>
+          <span class="highlight__day">${day}</span>
+          <span class="highlight__year">${year}</span>
+        </div>
+        <div class="highlight__body">
+          <span class="highlight__tag highlight__tag--${h.type}">${typeLabel(h.type)}</span>
+          <h3 class="highlight__title">${h.title}</h3>
+          <p class="highlight__detail">${h.detail}</p>
+        </div>
+      </article>
+    `;
+  }).join('');
+
+  container.innerHTML = `<div class="timeline">${items}</div>`;
+}
 
 function renderGoals() {
   const container = $('#goals-container');
@@ -56,9 +85,9 @@ onReady(() => {
   initNavigation();
   initTheme();
   initParticles();
-  initCalendar();
   initExtracurriculars();
   initContactForm();
+  renderHighlights();
   renderGoals();
   initHeroCounters();
   initPageAnimations();
