@@ -652,9 +652,9 @@ main.page-exit--backward {
 
 .nav__indicator {
   position: absolute;
-  top: 4px;
+  top: var(--indicator-y, 0);
   left: 0;
-  height: var(--indicator-h, calc(100% - 8px));
+  height: var(--indicator-h, 100%);
   background: var(--color-text);
   border-radius: var(--radius-full);
   z-index: 0;
