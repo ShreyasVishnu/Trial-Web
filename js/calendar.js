@@ -1,8 +1,7 @@
 import { $, $$ } from './utils.js';
 
-export { events, upcoming };
-
-const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+const months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+const monthsShort = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
 
 const events = [
   { date: '2025-02-08', type: 'milestone', title: 'SEFH Science Fair', detail: 'Qualified for the Science and Engineering Fair of Houston with the lung cancer cytotoxicity study.' },
@@ -60,74 +59,77 @@ export function initCalendar() {
   const todayKey = dateKey(today);
   let selectedKey = null;
   let viewYear = today.getFullYear();
+  let viewMonth = today.getMonth();
 
   function renderDetail(key) {
     const e = eventForDate(key);
     if (!e) {
       detail.innerHTML = `
         <div class="calendar__detail-empty">
-          <h4>No highlights for this day</h4>
-          <p>Click a highlighted date to see what happened or what's planned.</p>
+          <div class="calendar__detail-date-icon">${parseInt(key.split('-')[2], 10)}</div>
+          <h4>Nothing on this day</h4>
+          <p>Pick a highlighted date to see the highlight.</p>
         </div>
       `;
       return;
     }
     const d = new Date(key + 'T00:00:00');
-    const formatted = d.toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric', year: 'numeric' });
+    const formatted = d.toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric' });
     detail.innerHTML = `
       <div class="calendar__detail-card">
-        <div class="calendar__detail-meta">
-          <span class="calendar__detail-type" style="background: ${typeColor(e.type)}">${e.type}</span>
-          <span class="calendar__detail-date">${formatted}</span>
-        </div>
+        <div class="calendar__detail-type" style="background: ${typeColor(e.type)}">${e.type}</div>
+        <div class="calendar__detail-date">${formatted}</div>
         <h4 class="calendar__detail-title">${e.title}</h4>
         <p class="calendar__detail-text">${e.detail}</p>
       </div>
     `;
   }
 
-  function renderYear() {
-    const yearHtml = Array.from({ length: 12 }, (_, m) => {
-      const firstDay = new Date(viewYear, m, 1).getDay();
-      const daysInMonth = new Date(viewYear, m + 1, 0).getDate();
-      let daysHtml = '';
-      for (let i = 0; i < firstDay; i++) {
-        daysHtml += '<div class="mini-day mini-day--empty"></div>';
-      }
-      for (let d = 1; d <= daysInMonth; d++) {
-        const key = `${viewYear}-${String(m + 1).padStart(2, '0')}-${String(d).padStart(2, '0')}`;
-        const ev = eventForDate(key);
-        const isToday = key === todayKey;
-        const isSelected = key === selectedKey;
-        const classes = ['mini-day'];
-        if (ev) classes.push('mini-day--event');
-        if (isToday) classes.push('mini-day--today');
-        if (isSelected) classes.push('mini-day--selected');
-        const dot = ev ? `<span class="mini-day__dot" style="background: ${typeColor(ev.type)}"></span>` : '';
-        daysHtml += `<button class="${classes.join(' ')}" data-key="${key}" ${ev ? '' : 'disabled'}>${d}${dot}</button>`;
-      }
-      return `
-        <div class="mini-month">
-          <div class="mini-month__title">${months[m]}</div>
-          <div class="mini-month__grid">
-            <div class="mini-weekday">S</div>
-            <div class="mini-weekday">M</div>
-            <div class="mini-weekday">T</div>
-            <div class="mini-weekday">W</div>
-            <div class="mini-weekday">T</div>
-            <div class="mini-weekday">F</div>
-            <div class="mini-weekday">S</div>
-            ${daysHtml}
-          </div>
-        </div>
-      `;
-    }).join('');
+  function renderMonth(m, y) {
+    const firstDay = new Date(y, m, 1).getDay();
+    const daysInMonth = new Date(y, m + 1, 0).getDate();
+    let daysHtml = '';
+    for (let i = 0; i < firstDay; i++) {
+      daysHtml += '<div class="mini-day mini-day--empty"></div>';
+    }
+    for (let d = 1; d <= daysInMonth; d++) {
+      const key = `${y}-${String(m + 1).padStart(2, '0')}-${String(d).padStart(2, '0')}`;
+      const ev = eventForDate(key);
+      const isToday = key === todayKey;
+      const isSelected = key === selectedKey;
+      const classes = ['mini-day'];
+      if (ev) classes.push('mini-day--event');
+      if (isToday) classes.push('mini-day--today');
+      if (isSelected) classes.push('mini-day--selected');
+      const dayNames = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+      const dayName = dayNames[new Date(y, m, d).getDay()];
+      const ariaLabel = `${dayName} ${months[m]} ${d}, ${y}${ev ? ' — ' + ev.title : ''}`;
+      daysHtml += `<button class="${classes.join(' ')}" data-key="${key}" aria-label="${ariaLabel}">${d}</button>`;
+    }
+    return daysHtml;
+  }
+
+  function render() {
+    const prevMonth = viewMonth === 0 ? { m: 11, y: viewYear - 1 } : { m: viewMonth - 1, y: viewYear };
+    const nextMonth = viewMonth === 11 ? { m: 0, y: viewYear + 1 } : { m: viewMonth + 1, y: viewYear };
 
     container.innerHTML = `
-      <div class="calendar__year-header">
-        <button class="calendar__year-nav" id="year-prev" aria-label="Previous year">&lsaquo;</button>
-        <h3 class="calendar__year-title">${viewYear}</h3>
-        <button class="calendar__year-nav" id="year-next" aria-label="Next year">&rsaquo;</button>
+      <div class="calendar__month-nav">
+        <button class="calendar__month-btn" data-action="prev" aria-label="Previous month">
+          <span class="calendar__month-arrow">&lsaquo;</span>
+          <span class="calendar__month-label">${monthsShort[prevMonth.m]}</span>
+        </button>
+        <h3 class="calendar__month-title">${months[viewMonth]} ${viewYear}</h3>
+        <button class="calendar__month-btn" data-action="next" aria-label="Next month">
+          <span class="calendar__month-label">${monthsShort[nextMonth.m]}</span>
+          <span class="calendar__month-arrow">&rsaquo;</span>
+        </button>
+      </div>
+      <div class="calendar__weekdays">
+        <div>S</div><div>M</div><div>T</div><div>W</div><div>T</div><div>F</div><div>S</div>
+      </div>
+      <div class="calendar__grid">
+        ${renderMonth(viewMonth, viewYear)}
       </div>
       <div class="calendar__legend">
         <span class="calendar__legend-item"><span class="calendar__legend-dot" style="background: var(--color-text)"></span>Milestone</span>
@@ -135,30 +137,31 @@ export function initCalendar() {
         <span class="calendar__legend-item"><span class="calendar__legend-dot" style="background: var(--color-accent)"></span>Volunteer</span>
         <span class="calendar__legend-item"><span class="calendar__legend-dot" style="background: var(--color-primary)"></span>Event</span>
       </div>
-      <div class="mini-year">${yearHtml}</div>
     `;
 
-    container.querySelector('#year-prev').addEventListener('click', () => {
-      viewYear--;
-      renderYear();
+    container.querySelector('[data-action="prev"]').addEventListener('click', () => {
+      if (viewMonth === 0) { viewMonth = 11; viewYear--; } else { viewMonth--; }
+      render();
     });
-    container.querySelector('#year-next').addEventListener('click', () => {
-      viewYear++;
-      renderYear();
+    container.querySelector('[data-action="next"]').addEventListener('click', () => {
+      if (viewMonth === 11) { viewMonth = 0; viewYear++; } else { viewMonth++; }
+      render();
     });
 
     $$('[data-key]', container).forEach(btn => {
       btn.addEventListener('click', () => {
-        const key = btn.dataset.key;
-        selectedKey = key;
-        renderYear();
-        renderDetail(key);
+        selectedKey = btn.dataset.key;
+        render();
+        renderDetail(selectedKey);
       });
     });
   }
 
-  const upcomingEvent = upcoming.find(e => new Date(e.date) > today) || upcoming[0];
-  selectedKey = upcomingEvent.date;
-  renderYear();
-  renderDetail(upcomingEvent.date);
+  // Show the next upcoming event on initial load
+  const nextEvent = events.find(e => new Date(e.date) >= today) || events[events.length - 1];
+  selectedKey = nextEvent.date;
+  viewMonth = new Date(selectedKey).getMonth();
+  viewYear = new Date(selectedKey).getFullYear();
+  render();
+  renderDetail(selectedKey);
 }
