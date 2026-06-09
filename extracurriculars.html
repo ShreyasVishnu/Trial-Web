@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Shreyas Bishnu — Extracurriculars">
+    <title>Extracurriculars — Shreyas Bishnu</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <header class="header">
+        <nav class="nav container">
+            <a href="index.html" class="nav__logo">Shreyas Bishnu</a>
+            <ul class="nav__links">
+                <li><a class="nav__link" href="index.html">Home</a></li>
+                <li><a class="nav__link" href="about.html">About</a></li>
+                <li><a class="nav__link nav__link--active" href="extracurriculars.html">Extracurriculars</a></li>
+                <li><a class="nav__link" href="contact.html">Contact</a></li>
+                <li><a class="nav__link" href="index.html#calendar">Calendar</a></li>
+                <li>
+                    <button class="theme-toggle" id="theme-toggle" aria-label="Toggle dark mode">
+                        <span class="theme-toggle__icon theme-toggle__icon--sun">☀️</span>
+                        <span class="theme-toggle__icon theme-toggle__icon--moon">🌙</span>
+                    </button>
+                </li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <section class="section section--alt" id="extracurriculars" style="padding-top: calc(var(--header-height) + var(--spacing-12));">
+            <div class="container">
+                <div id="extras-branch">
+                    <h2 class="section__title">Extracurriculars</h2>
+                    <p class="section__subtitle">Choose a category to explore</p>
+                    <div class="branch-grid">
+                        <div class="branch-card" data-category="activities">
+                            <span class="branch-card__icon">🏃</span>
+                            <h3 class="branch-card__title">Activities</h3>
+                            <p class="branch-card__text">Clubs, teams, and leadership roles I'm involved in.</p>
+                            <span class="branch-card__count">8 items</span>
+                        </div>
+                        <div class="branch-card" data-category="research">
+                            <span class="branch-card__icon">🔬</span>
+                            <h3 class="branch-card__title">Research</h3>
+                            <p class="branch-card__text">BSL2 lab investigations in cancer biology and microbiology.</p>
+                            <span class="branch-card__count">2 projects</span>
+                        </div>
+                        <div class="branch-card" data-category="volunteer">
+                            <span class="branch-card__icon">🤝</span>
+                            <h3 class="branch-card__title">Volunteer</h3>
+                            <p class="branch-card__text">Community service and outreach work.</p>
+                            <span class="branch-card__count">6 activities</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="extras-content" style="display:none;">
+                    <button class="back-btn" id="back-to-branch">&larr; Back to categories</button>
+                    <h2 class="section__title" id="extras-category-title"></h2>
+                    <p class="section__subtitle" id="extras-category-subtitle"></p>
+                    <div class="card-grid" id="extras-grid"></div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2026 Shreyas Bishnu</p>
+            <nav class="footer__links">
+                <a href="mailto:shreyasvishnu@yahoo.com">Email</a>
+            </nav>
+        </div>
+    </footer>
+
+    <script type="module" src="js/main.js"></script>
+</body>
+</html>

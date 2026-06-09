@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Contact Shreyas Bishnu">
+    <title>Contact — Shreyas Bishnu</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <header class="header">
+        <nav class="nav container">
+            <a href="index.html" class="nav__logo">Shreyas Bishnu</a>
+            <ul class="nav__links">
+                <li><a class="nav__link" href="index.html">Home</a></li>
+                <li><a class="nav__link" href="about.html">About</a></li>
+                <li><a class="nav__link" href="extracurriculars.html">Extracurriculars</a></li>
+                <li><a class="nav__link nav__link--active" href="contact.html">Contact</a></li>
+                <li><a class="nav__link" href="index.html#calendar">Calendar</a></li>
+                <li>
+                    <button class="theme-toggle" id="theme-toggle" aria-label="Toggle dark mode">
+                        <span class="theme-toggle__icon theme-toggle__icon--sun">☀️</span>
+                        <span class="theme-toggle__icon theme-toggle__icon--moon">🌙</span>
+                    </button>
+                </li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <section class="section section--alt" id="contact" style="padding-top: calc(var(--header-height) + var(--spacing-12));">
+            <div class="container">
+                <h2 class="section__title">Contact Me</h2>
+                <p class="section__subtitle">Have a question or just want to connect?</p>
+                <div class="profile__contact">
+                    <form class="contact-form" id="contact-form">
+                        <div class="contact-form__group">
+                            <input type="text" id="contact-name" class="contact-form__input" placeholder="Your Name" required>
+                        </div>
+                        <div class="contact-form__group">
+                            <input type="email" id="contact-email" class="contact-form__input" placeholder="Your Email" required>
+                        </div>
+                        <div class="contact-form__group">
+                            <textarea id="contact-message" class="contact-form__input contact-form__input--textarea" rows="5" placeholder="Your Message" required></textarea>
+                        </div>
+                        <button type="submit" class="contact-form__submit">Send Message</button>
+                    </form>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2026 Shreyas Bishnu</p>
+            <nav class="footer__links">
+                <a href="mailto:shreyasvishnu@yahoo.com">Email</a>
+            </nav>
+        </div>
+    </footer>
+
+    <script type="module" src="js/main.js"></script>
+</body>
+</html>

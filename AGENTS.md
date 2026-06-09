@@ -1,0 +1,107 @@
+# AGENTS.md - AI Agent Instructions
+
+This file provides guidance for AI assistants working on this personal portfolio website.
+
+## Project Context
+
+- **Type**: Personal portfolio website
+- **Focus**: Showcasing Shreyas Bishnu's extracurriculars, BSL2 research, volunteer work, and awards
+- **Duration**: One-month intensive class
+- **Goal**: Build, document, and deploy while learning LLM-assisted coding
+
+## Coding Standards
+
+### HTML
+- Semantic HTML5 elements
+- Accessible markup (ARIA labels, alt text)
+- Mobile-first responsive design
+- Clean, indented structure
+
+### SCSS
+- SCSS partials compiled via Dart Sass (`npm run sass`)
+- CSS custom properties for theming (in `_variables.scss`)
+- BEM naming convention
+- Mobile-first breakpoints
+- Minimal utility classes
+- Use `@use` for importing partials (not `@import`)
+- Run `npm run sass:watch` during development for auto-compilation
+
+### JavaScript
+- Vanilla ES6+ (modules, const/let, arrow functions)
+- No frameworks unless explicitly requested
+- Event delegation for dynamic content
+- Progressive enhancement
+
+## File Organization
+
+```
+/
+├── index.html              # Main entry point
+├── css/
+│   ├── _variables.scss     # Design tokens
+│   ├── _reset.scss         # Browser reset
+│   ├── _layout.scss        # Grid/flex layouts
+│   ├── style.scss          # Main import file (compiles to style.css)
+│   └── style.css           # Compiled output (do not edit directly)
+├── js/
+│   ├── utils.js            # Helper functions
+│   ├── navigation.js       # Site navigation
+│   ├── projects.js         # Section data (extracurriculars, research, volunteer)
+│   ├── theme.js            # Dark/light mode toggle
+│   ├── particles.js        # Hero floating particles
+│   └── main.js             # App initialization
+└── docs/                   # Documentation
+```
+
+## AI Assistance Guidelines
+
+### When generating code:
+1. Follow existing patterns in the codebase
+2. Use semantic, accessible markup
+3. Keep CSS modular and maintainable
+4. Write vanilla JS - no dependencies
+5. Include comments for complex logic
+
+### When documenting:
+1. Update README.md with new features
+2. Document each project in projects/
+3. Keep AGENTS.md current with patterns
+4. Write clear commit messages
+
+### When debugging:
+1. Check browser console first
+2. Validate HTML/CSS
+3. Test responsive breakpoints
+4. Verify accessibility
+
+## Project-Specific Patterns
+
+### Adding a new section or item:
+1. Add data to the appropriate array in `js/projects.js`
+2. Use the existing card component pattern
+3. Update this file if the section structure changes
+
+### Styling approach:
+- Design tokens in `css/_variables.scss`
+- Component styles in `css/style.scss`
+- Page-specific styles inline or in page CSS
+
+### JavaScript modules:
+- Each feature in its own file
+- Import/export via ES modules
+- Initialize in `main.js`
+
+## Deployment Notes
+
+- Static site - no build step required (style.css is committed)
+- Deploy to GitHub Pages, Netlify, or Vercel
+- Ensure all paths are relative
+- Test locally with `npm start`, `npx serve`, or Live Server
+
+## Learning Objectives for AI
+
+This project is a learning exercise. When assisting:
+- Explain concepts, don't just give code
+- Show multiple approaches when relevant
+- Point to MDN/web.dev for reference
+- Encourage understanding over copying

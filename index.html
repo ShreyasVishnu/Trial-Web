@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Shreyas Bishnu — Personal Portfolio | Research, Volunteer, Extracurriculars">
+    <title>Shreyas Bishnu — Personal Portfolio</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <header class="header">
+        <nav class="nav container">
+            <a href="index.html" class="nav__logo">Shreyas Bishnu</a>
+            <ul class="nav__links">
+                <li><a class="nav__link nav__link--active" href="index.html">Home</a></li>
+                <li><a class="nav__link" href="about.html">About</a></li>
+                <li><a class="nav__link" href="extracurriculars.html">Extracurriculars</a></li>
+                <li><a class="nav__link" href="contact.html">Contact</a></li>
+                <li><a class="nav__link" href="index.html#calendar">Calendar</a></li>
+                <li>
+                    <button class="theme-toggle" id="theme-toggle" aria-label="Toggle dark mode">
+                        <span class="theme-toggle__icon theme-toggle__icon--sun">☀️</span>
+                        <span class="theme-toggle__icon theme-toggle__icon--moon">🌙</span>
+                    </button>
+                </li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <section class="hero" id="home">
+            <div class="hero__particles" id="hero-particles"></div>
+            <div class="hero__content">
+                <p class="hero__greeting">Hi, I'm</p>
+                <h1 class="hero__title">
+                    <a href="about.html" class="hero__name-link">
+                        <span class="hero__gradient-text">Shreyas Bishnu</span>
+                    </a>
+                </h1>
+                <p class="hero__subtitle">Sophomore at Clear Lake High School · Researcher · Volunteer · Future healthcare professional</p>
+                <div class="hero__cta-group">
+                    <a href="extracurriculars.html" class="hero__cta">Explore My Work</a>
+                    <a href="contact.html" class="hero__cta hero__cta--secondary">Get in Touch</a>
+                </div>
+                <div class="hero__stats">
+                    <div class="stat">
+                        <span class="stat__number" id="projects-count">0</span>
+                        <span class="stat__label">Activities</span>
+                    </div>
+                    <div class="stat">
+                        <span class="stat__number" id="hours-count">0</span>
+                        <span class="stat__label">Volunteer Hours</span>
+                    </div>
+                    <div class="stat">
+                        <span class="stat__number" id="awards-count">0</span>
+                        <span class="stat__label">Awards</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="section section--alt" id="calendar">
+            <div class="container">
+                <h2 class="section__title">Calendar</h2>
+                <p class="section__subtitle">Stay on track with my schedule</p>
+                <div class="calendar" id="calendar-container"></div>
+            </div>
+        </section>
+
+        <section class="section" id="goals">
+            <div class="container">
+                <h2 class="section__title">Upcoming Goals</h2>
+                <p class="section__subtitle">What I'm working toward</p>
+                <div class="goals" id="goals-container"></div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2026 Shreyas Bishnu</p>
+            <nav class="footer__links">
+                <a href="mailto:shreyasvishnu@yahoo.com">Email</a>
+            </nav>
+        </div>
+    </footer>
+
+    <script type="module" src="js/main.js"></script>
+</body>
+</html>

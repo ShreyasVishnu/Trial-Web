@@ -1,0 +1,14 @@
+{
+  "name": "cv-learning-journey",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Computer Vision Learning Journey - personal portfolio and goal tracker",
+  "scripts": {
+    "sass": "sass css/style.scss css/style.css",
+    "sass:watch": "sass --watch css/style.scss css/style.css",
+    "start": "npx serve ."
+  },
+  "devDependencies": {
+    "sass": "^1.77.0"
+  }
+}
