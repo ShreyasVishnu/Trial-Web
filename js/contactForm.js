@@ -17,7 +17,7 @@
 // announced via aria-describedby + aria-invalid, focus moves to the first
 // invalid field on submit.
 
-const FORMSPREE_ENDPOINT = 'https://formspree.io/f/REPLACE_ME'; // ← student: sign up at formspree.io, replace with real ID
+const FORMSPREE_ENDPOINT = 'https://formspree.io/f/xwvjnenz'; // Formspree endpoint for Shreyas Bishnu portfolio
 
 export function initContactForm() {
   const form = document.getElementById('contact-form');
