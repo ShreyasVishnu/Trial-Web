@@ -6,9 +6,12 @@
   "scripts": {
     "sass": "sass css/style.scss css/style.css",
     "sass:watch": "sass --watch css/style.scss css/style.css",
-    "start": "npx serve ."
+    "start": "npx serve .",
+    "test": "playwright test",
+    "test:headed": "playwright test --headed"
   },
   "devDependencies": {
+    "@playwright/test": "^1.60.0",
     "sass": "^1.77.0"
   }
 }
