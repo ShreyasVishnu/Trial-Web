@@ -4,6 +4,7 @@ import { initTheme } from './theme.js';
 import { initParticles } from './particles.js';
 import { initExtracurriculars } from './extracurriculars.js';
 import { initTransitions } from './transitions.js';
+import { initContactForm } from './contactForm.js';
 import { highlights, upcoming, typeLabel } from './calendar.js';
 
 function renderHighlights() {
@@ -51,21 +52,6 @@ function initPageAnimations() {
   const animEls = document.querySelectorAll('.animate-on-scroll');
   animEls.forEach((el, i) => {
     setTimeout(() => el.classList.add('visible'), i * 100 + 200);
-  });
-}
-
-function initContactForm() {
-  const form = $('#contact-form');
-  if (!form) return;
-  form.addEventListener('submit', (e) => {
-    e.preventDefault();
-    const name = $('#contact-name').value.trim();
-    const email = $('#contact-email').value.trim();
-    const message = $('#contact-message').value.trim();
-    if (!name || !email || !message) return;
-    const subject = encodeURIComponent(`Message from ${name} — Shreyas Bishnu Portfolio`);
-    const body = encodeURIComponent(`Name: ${name}\nEmail: ${email}\n\nMessage:\n${message}`);
-    window.location.href = `mailto:shreyasvishnu@yahoo.com?subject=${subject}&body=${body}`;
   });
 }
 
