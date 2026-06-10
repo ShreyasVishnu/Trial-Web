@@ -4,3 +4,10 @@ node_modules/
 
 # Microsoft Office lock files
 ~$*
+
+# Playwright artifacts
+/test-results/
+/playwright-report/
+/blob-report/
+/playwright/.cache/
+
