@@ -553,7 +553,7 @@ main.page-exit--backward {
   position: absolute;
   top: 50%;
   left: 0;
-  height: calc(100% - 8px);
+  height: calc(100% - 14px);
   background: var(--color-text);
   border-radius: var(--radius-full);
   z-index: 0;
@@ -565,12 +565,12 @@ main.page-exit--backward {
 }
 @media (max-width: 640px) {
   .nav__indicator {
-    height: calc(100% - 6px);
+    height: calc(100% - 10px);
   }
 }
 @media (max-width: 400px) {
   .nav__indicator {
-    height: calc(100% - 4px);
+    height: calc(100% - 8px);
   }
 }
 
