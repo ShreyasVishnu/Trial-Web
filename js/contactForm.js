@@ -59,51 +59,6 @@ export function initContactForm() {
 
   const isValidEmail = (val) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(val);
 
-  const COMMON_DOMAINS = new Set([
-    'gmail.com', 'yahoo.com', 'outlook.com', 'hotmail.com',
-    'aol.com', 'icloud.com', 'protonmail.com', 'mail.com',
-    'live.com', 'comcast.net', 'msn.com'
-  ]);
-
-  const LEVENSHTEIN = (a, b) => {
-    const m = a.length, n = b.length;
-    const dp = Array.from({ length: m + 1 }, (_, i) => [i]);
-    for (let j = 1; j <= n; j++) dp[0][j] = j;
-    for (let i = 1; i <= m; i++)
-      for (let j = 1; j <= n; j++)
-        dp[i][j] = Math.min(
-          dp[i - 1][j] + 1,
-          dp[i][j - 1] + 1,
-          dp[i - 1][j - 1] + (a[i - 1] !== b[j - 1] ? 1 : 0)
-        );
-    return dp[m][n];
-  };
-
-  const suggestDomain = (domain) => {
-    if (COMMON_DOMAINS.has(domain)) return null;
-    let best = null, bestDist = Infinity;
-    for (const d of COMMON_DOMAINS) {
-      const dist = LEVENSHTEIN(domain, d);
-      if (dist < bestDist) { bestDist = dist; best = d; }
-    }
-    return (bestDist <= 2 && bestDist < domain.length * 0.4) ? best : null;
-  };
-
-  const TLD_LIST = ['.com', '.net', '.org', '.edu', '.gov', '.io', '.co', '.us', '.me', '.info'];
-
-  const validateEmailDomain = (val) => {
-    const domain = val.split('@')[1]?.toLowerCase();
-    if (!domain) return null;
-    if (!domain.includes('.')) {
-      const match = [...COMMON_DOMAINS].find(d => domain === d.split('.')[0]);
-      if (match) return `Did you mean @${match}?`;
-      return 'Your email domain is missing a suffix like .com or .net.';
-    }
-    const suggestion = suggestDomain(domain);
-    if (suggestion) return `Did you mean @${suggestion}?`;
-    return null;
-  };
-
   const validate = () => {
     clearAllErrors();
     let firstInvalid = null;
@@ -114,15 +69,9 @@ export function initContactForm() {
     if (!emailInput.value.trim()) {
       setError(emailInput, 'Please enter your email.');
       firstInvalid = firstInvalid || emailInput;
-} else if (!isValidEmail(emailInput.value.trim())) {
-      setError(emailInput, 'That email doesn't look right.');
+    } else if (!isValidEmail(emailInput.value.trim())) {
+      setError(emailInput, 'That email doesn’t look right.');
       firstInvalid = firstInvalid || emailInput;
-    } else {
-      const domainHint = validateEmailDomain(emailInput.value.trim());
-      if (domainHint) {
-        setError(emailInput, domainHint);
-        firstInvalid = firstInvalid || emailInput;
-      }
     }
     if (!messageInput.value.trim()) {
       setError(messageInput, 'Please write a message.');
