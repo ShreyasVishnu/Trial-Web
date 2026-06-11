@@ -551,17 +551,27 @@ main.page-exit--backward {
 
 .nav__indicator {
   position: absolute;
-  top: var(--indicator-y, 0);
+  top: 50%;
   left: 0;
-  height: var(--indicator-h, 100%);
+  height: calc(100% - 8px);
   background: var(--color-text);
   border-radius: var(--radius-full);
   z-index: 0;
   pointer-events: none;
-  transition: transform 0.4s cubic-bezier(0.34, 1.4, 0.5, 1), width 0.35s cubic-bezier(0.34, 1.4, 0.5, 1), height 0.3s ease;
-  transform: translate3d(var(--indicator-x, 0), 0, 0);
+  transition: transform 0.4s cubic-bezier(0.34, 1.4, 0.5, 1), width 0.35s cubic-bezier(0.34, 1.4, 0.5, 1);
+  transform: translate3d(var(--indicator-x, 0), -50%, 0);
   width: var(--indicator-w, 0);
-  will-change: transform, width, height;
+  will-change: transform, width;
+}
+@media (max-width: 640px) {
+  .nav__indicator {
+    height: calc(100% - 6px);
+  }
+}
+@media (max-width: 400px) {
+  .nav__indicator {
+    height: calc(100% - 4px);
+  }
 }
 
 .nav__link {
