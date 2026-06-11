@@ -208,23 +208,21 @@ main {
 }
 
 .nav {
-  display: grid;
-  grid-template-columns: 1fr auto 1fr;
+  display: flex;
   align-items: center;
+  justify-content: center;
+  position: relative;
   height: 100%;
   gap: var(--spacing-4);
 }
 
-.nav > :nth-child(3) {
-  display: none;
-}
-
 .nav__logo {
+  position: absolute;
+  left: 0;
   display: inline-flex;
   align-items: center;
   text-decoration: none;
   transition: var(--transition-base);
-  justify-self: start;
 
   &:hover .nav__logo-mark {
     border-color: var(--color-text);
@@ -258,13 +256,20 @@ main {
   gap: 0;
   position: relative;
   align-items: center;
-  justify-self: center;
   border: 1px solid var(--color-border);
   background: var(--color-surface);
   padding: 4px;
   border-radius: var(--radius-full);
   box-shadow: 0 0 0 1px transparent;
   transition: border-color var(--transition-base);
+
+  @media (max-width: 640px) {
+    padding: 3px;
+  }
+
+  @media (max-width: 400px) {
+    padding: 2px;
+  }
 }
 
 .nav__divider {
@@ -273,6 +278,11 @@ main {
   background: var(--color-border);
   margin: 0 4px;
   flex-shrink: 0;
+
+  @media (max-width: 400px) {
+    margin: 0 2px;
+    height: 16px;
+  }
 }
 
 .nav__indicator {
@@ -318,50 +328,40 @@ main {
     transition: color 0.15s ease;
   }
 
-  @media (max-width: 640px) {
-    padding: var(--spacing-1) var(--spacing-3);
+  @media (max-width: 768px) {
+    padding: var(--spacing-2) var(--spacing-4);
     font-size: var(--font-size-xs);
     letter-spacing: 0;
   }
 
-  @media (max-width: 400px) {
+  @media (max-width: 480px) {
+    padding: var(--spacing-1) var(--spacing-3);
+    font-size: 0.7rem;
+  }
+
+  @media (max-width: 380px) {
     padding: var(--spacing-1) var(--spacing-2);
     font-size: 0.65rem;
-  }
-}
-
-.nav__links {
-  @media (max-width: 640px) {
-    padding: 3px;
-  }
-
-  @media (max-width: 400px) {
-    padding: 2px;
-  }
-}
-
-.nav__divider {
-  @media (max-width: 400px) {
-    margin: 0 2px;
-    height: 16px;
   }
 }
 
 .nav__link-text--short {
   display: none;
 
-  @media (max-width: 400px) {
+  @media (max-width: 480px) {
     display: inline;
   }
 }
 
 .nav__link-text--full {
-  @media (max-width: 400px) {
+  @media (max-width: 480px) {
     display: none;
   }
 }
 
 .theme-toggle {
+  position: absolute;
+  right: 0;
   width: 36px;
   height: 36px;
   background: transparent;
@@ -370,9 +370,7 @@ main {
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  position: relative;
   transition: color var(--transition-base);
-  position: relative;
   color: var(--color-text-secondary);
 
   &:hover {
