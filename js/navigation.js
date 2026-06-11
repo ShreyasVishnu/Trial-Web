@@ -37,9 +37,10 @@ function initNavIndicator() {
     const linkRect = link.getBoundingClientRect();
     const navRect = navLinks.getBoundingClientRect();
     const x = linkRect.left - navRect.left;
+    const inset = 6;
 
-    indicator.style.setProperty('--indicator-x', `${x}px`);
-    indicator.style.setProperty('--indicator-w', `${linkRect.width}px`);
+    indicator.style.setProperty('--indicator-x', `${x + inset}px`);
+    indicator.style.setProperty('--indicator-w', `${linkRect.width - (inset * 2)}px`);
   }
 
   function positionInstant(link) {

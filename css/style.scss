@@ -208,11 +208,12 @@ main {
 }
 
 .nav {
-  display: grid;
-  grid-template-columns: auto 1fr auto;
+  display: flex;
   align-items: center;
+  justify-content: center;
   height: 100%;
   gap: var(--spacing-4);
+  position: relative;
 }
 
 .nav__logo {
@@ -220,6 +221,7 @@ main {
   align-items: center;
   text-decoration: none;
   transition: var(--transition-base);
+  flex-shrink: 0;
 
   &:hover .nav__logo-mark {
     border-color: var(--color-text);
@@ -287,7 +289,7 @@ main {
   position: absolute;
   top: 50%;
   left: 0;
-  height: calc(100% - 14px);
+  height: calc(100% - 12px);
   background: var(--color-text);
   border-radius: var(--radius-full);
   z-index: 0;
@@ -298,11 +300,11 @@ main {
   will-change: transform, width;
 
   @media (max-width: 640px) {
-    height: calc(100% - 10px);
+    height: calc(100% - 8px);
   }
 
   @media (max-width: 400px) {
-    height: calc(100% - 8px);
+    height: calc(100% - 6px);
   }
 }
 
@@ -374,10 +376,11 @@ main {
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  position: relative;
+  position: absolute;
+  right: 0;
   transition: color var(--transition-base);
   color: var(--color-text-secondary);
-  justify-self: end;
+  flex-shrink: 0;
 
   &:hover {
     color: var(--color-text);
