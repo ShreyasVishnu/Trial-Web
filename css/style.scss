@@ -208,17 +208,14 @@ main {
 }
 
 .nav {
-  display: flex;
+  display: grid;
+  grid-template-columns: auto 1fr auto;
   align-items: center;
-  justify-content: center;
-  position: relative;
   height: 100%;
   gap: var(--spacing-4);
 }
 
 .nav__logo {
-  position: absolute;
-  left: 0;
   display: inline-flex;
   align-items: center;
   text-decoration: none;
@@ -256,6 +253,7 @@ main {
   gap: 0;
   position: relative;
   align-items: center;
+  justify-self: center;
   border: 1px solid var(--color-border);
   background: var(--color-surface);
   padding: 4px;
@@ -360,8 +358,6 @@ main {
 }
 
 .theme-toggle {
-  position: absolute;
-  right: 0;
   width: 36px;
   height: 36px;
   background: transparent;
@@ -370,8 +366,10 @@ main {
   align-items: center;
   justify-content: center;
   cursor: pointer;
+  position: relative;
   transition: color var(--transition-base);
   color: var(--color-text-secondary);
+  justify-self: end;
 
   &:hover {
     color: var(--color-text);
