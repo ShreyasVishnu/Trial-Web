@@ -208,11 +208,12 @@ main {
 }
 
 .nav {
-  display: grid;
-  grid-template-columns: auto 1fr auto;
+  display: flex;
   align-items: center;
+  justify-content: center;
   height: 100%;
   gap: var(--spacing-4);
+  position: relative;
 }
 
 .nav__logo {
@@ -220,6 +221,7 @@ main {
   align-items: center;
   text-decoration: none;
   transition: var(--transition-base);
+  flex-shrink: 0;
 
   &:hover .nav__logo-mark {
     border-color: var(--color-text);
