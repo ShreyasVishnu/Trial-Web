@@ -317,6 +317,48 @@ main {
     color: var(--color-background);
     transition: color 0.15s ease;
   }
+
+  @media (max-width: 640px) {
+    padding: var(--spacing-1) var(--spacing-3);
+    font-size: var(--font-size-xs);
+    letter-spacing: 0;
+  }
+
+  @media (max-width: 400px) {
+    padding: var(--spacing-1) var(--spacing-2);
+    font-size: 0.65rem;
+  }
+}
+
+.nav__links {
+  @media (max-width: 640px) {
+    padding: 3px;
+  }
+
+  @media (max-width: 400px) {
+    padding: 2px;
+  }
+}
+
+.nav__divider {
+  @media (max-width: 400px) {
+    margin: 0 2px;
+    height: 16px;
+  }
+}
+
+.nav__link-text--short {
+  display: none;
+
+  @media (max-width: 400px) {
+    display: inline;
+  }
+}
+
+.nav__link-text--full {
+  @media (max-width: 400px) {
+    display: none;
+  }
 }
 
 .theme-toggle {

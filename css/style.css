@@ -579,6 +579,52 @@ main.page-exit--backward {
   color: var(--color-background);
   transition: color 0.15s ease;
 }
+@media (max-width: 640px) {
+  .nav__link {
+    padding: var(--spacing-1) var(--spacing-3);
+    font-size: var(--font-size-xs);
+    letter-spacing: 0;
+  }
+}
+@media (max-width: 400px) {
+  .nav__link {
+    padding: var(--spacing-1) var(--spacing-2);
+    font-size: 0.65rem;
+  }
+}
+
+@media (max-width: 640px) {
+  .nav__links {
+    padding: 3px;
+  }
+}
+@media (max-width: 400px) {
+  .nav__links {
+    padding: 2px;
+  }
+}
+
+@media (max-width: 400px) {
+  .nav__divider {
+    margin: 0 2px;
+    height: 16px;
+  }
+}
+
+.nav__link-text--short {
+  display: none;
+}
+@media (max-width: 400px) {
+  .nav__link-text--short {
+    display: inline;
+  }
+}
+
+@media (max-width: 400px) {
+  .nav__link-text--full {
+    display: none;
+  }
+}
 
 .theme-toggle {
   width: 36px;
