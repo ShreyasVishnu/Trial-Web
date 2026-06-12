@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Hand Tracking + Gesture Recognition</title>
+  <title>Hand Tracking</title>
   <style>
     :root {
       --bg: #111114;
@@ -374,6 +374,16 @@
       font-size: 11px;
     }
 
+    .game-tip {
+      margin: 4px 0 0;
+      padding: 8px 10px;
+      border-radius: 6px;
+      background: rgba(255, 255, 255, 0.03);
+      color: #9a9aa3;
+      font-size: 11px;
+      line-height: 1.4;
+    }
+
     @media (max-width: 900px) {
       body {
         padding: 10px;
@@ -411,27 +421,27 @@
   </style>
 </head>
 <body>
-  <main id="layout" role="main" aria-label="Hand tracking and gesture recognition demo">
-    <h1 class="sr-only">Hand Tracking and Gesture Recognition</h1>
+  <main id="layout" role="main" aria-label="Hand tracking demo">
+    <h1 class="sr-only">Hand Tracking</h1>
     <div id="container">
       <div id="placeholder">
-        <p id="placeholder-title">Hand Tracking + Gesture Recognition</p>
-        <p id="placeholder-hint">Loading hand and gesture model...</p>
+        <p id="placeholder-title">Hand Tracking</p>
+        <p id="placeholder-hint">Loading hand landmark model...</p>
       </div>
 
       <video id="webcam" autoplay playsinline muted></video>
       <canvas id="overlay"></canvas>
 
-      <div id="status-banner">Loading hand and gesture model...</div>
+      <div id="status-banner">Loading hand landmark model...</div>
 
       <div id="gesture-readout">
         <div class="chip">
-          <span class="chip-label">Gesture</span>
-          <span id="gesture-label" class="chip-value">--</span>
+          <span class="chip-label">Mode</span>
+          <span id="gesture-label" class="chip-value">Hand</span>
         </div>
         <div class="chip">
-          <span class="chip-label">Confidence</span>
-          <span id="gesture-confidence" class="chip-value">--</span>
+          <span class="chip-label">Hands</span>
+          <span id="gesture-confidence" class="chip-value">0</span>
         </div>
         <div class="chip">
           <span class="chip-label">Hands</span>
@@ -440,6 +450,14 @@
         <div class="chip">
           <span class="chip-label">FPS</span>
           <span id="fps" class="chip-value">0</span>
+        </div>
+        <div class="chip">
+          <span class="chip-label">Score</span>
+          <span id="score-readout" class="chip-value">0</span>
+        </div>
+        <div class="chip">
+          <span class="chip-label">Time</span>
+          <span id="timer-readout" class="chip-value">30.0s</span>
         </div>
       </div>
     </div>
@@ -499,15 +517,22 @@
 
       <div id="smoothing-row">
         <label for="smoothing-slider">Smoothing</label>
-        <span id="smoothing-value">65%</span>
+        <span id="smoothing-value">40%</span>
       </div>
-      <input id="smoothing-slider" type="range" min="0" max="95" step="1" value="65" />
+      <input id="smoothing-slider" type="range" min="0" max="95" step="1" value="40" />
+
+      <p class="game-tip">
+        Keep your hand fully in frame, 12–24 inches from the camera,
+        palm facing the lens. Spread your fingers slightly when pointing
+        so the index fingertip landmark is unambiguous. Half a hand off
+        screen and the tracker will lose it.
+      </p>
     </aside>
   </main>
 
   <script type="module">
     import {
-      GestureRecognizer,
+      HandLandmarker,
       FilesetResolver
     } from "../../vendor/mediapipe/tasks-vision/vision_bundle.mjs";
     import {
@@ -541,6 +566,8 @@
     const gestureConfidenceEl = document.getElementById("gesture-confidence");
     const handCountEl = document.getElementById("hand-count");
     const fpsEl = document.getElementById("fps");
+    const scoreEl = document.getElementById("score-readout");
+    const timerEl = document.getElementById("timer-readout");
 
     const cameraToggleBtn = document.getElementById("camera-toggle");
     const cameraSourceSelect = document.getElementById("camera-source");
@@ -558,7 +585,7 @@
     const smoothingSlider = document.getElementById("smoothing-slider");
     const smoothingValueEl = document.getElementById("smoothing-value");
 
-    let gestureRecognizer = null;
+    let handLandmarker = null;
     let modelLoadFailed = false;
     let webcamRunning = false;
     let animationFrameId = 0;
@@ -577,15 +604,106 @@
     const DEFAULT_OVERLAY_COLOR = "#06b6d4";
     const OVERLAY_OUTLINE_COLOR = "rgba(5, 8, 14, 0.92)";
     const OVERLAY_CORE_COLOR = "rgba(248, 250, 252, 0.92)";
-    const GESTURE_RECOGNIZER_MODEL_PATH = "../../vendor/mediapipe/models/gesture_recognizer.task";
+    const HAND_LANDMARKER_MODEL_PATH = "../../vendor/mediapipe/models/hand_landmarker.task";
     let landmarkColor = DEFAULT_OVERLAY_COLOR;
     let landmarkFill = "rgba(6, 182, 212, 0.9)";
     let connectorColor = "rgba(6, 182, 212, 0.9)";
     let nodeRadius = Number.parseInt(nodeSizeInput.value, 10);
-    let smoothingStrength = 0.65;
+    let smoothingStrength = 0.4;
     const CAMERA_SOURCE_FRONT = "@user";
     const CAMERA_SOURCE_REAR = "@environment";
     const smoothedHands = new Map();
+
+    const GAME_DURATION_SECONDS = 30;
+    const TARGET_RADIUS_PX = 30;
+    const HIT_RADIUS_PX = 64;
+    const INDEX_FINGER_TIP_INDEX = 8;
+    const MIRROR_VIDEO = true;
+    const game = {
+      targetX: 0,
+      targetY: 0,
+      score: 0,
+      startTimeMs: 0,
+      isRunning: false,
+      flashUntilMs: 0,
+    };
+
+    function spawnTarget() {
+      const margin = TARGET_RADIUS_PX + 8;
+      const maxX = Math.max(margin * 2, canvas.width - margin * 2);
+      const maxY = Math.max(margin * 2, canvas.height - margin * 2);
+      game.targetX = margin + Math.random() * maxX;
+      game.targetY = margin + Math.random() * maxY;
+    }
+
+    function startGame() {
+      game.score = 0;
+      game.startTimeMs = performance.now();
+      game.isRunning = true;
+      spawnTarget();
+      scoreEl.textContent = "0";
+      timerEl.textContent = `${GAME_DURATION_SECONDS.toFixed(1)}s`;
+    }
+
+    function endGame() {
+      game.isRunning = false;
+      setStatus(`Game over — ${game.score} hit${game.score === 1 ? "" : "s"} in ${GAME_DURATION_SECONDS}s`, "ready");
+      timerEl.textContent = "0.0s";
+    }
+
+    function isInsideTarget(landmarkX, landmarkY) {
+      const dx = landmarkX - game.targetX;
+      const dy = landmarkY - game.targetY;
+      return Math.hypot(dx, dy) <= HIT_RADIUS_PX;
+    }
+
+    function updateGameUI(nowMs) {
+      if (!game.isRunning) return;
+      const elapsed = (nowMs - game.startTimeMs) / 1000;
+      const remaining = Math.max(0, GAME_DURATION_SECONDS - elapsed);
+      timerEl.textContent = `${remaining.toFixed(1)}s`;
+      if (remaining <= 0) endGame();
+    }
+
+    function drawTarget(ctx) {
+      if (!game.isRunning) return;
+      const flashing = performance.now() < game.flashUntilMs;
+      const ringFill = flashing ? "rgba(80, 255, 120, 0.55)" : "rgba(255, 200, 80, 0.32)";
+      const ringStroke = flashing ? "rgba(120, 255, 160, 1)" : "rgba(255, 210, 100, 0.95)";
+      ctx.save();
+      ctx.beginPath();
+      ctx.arc(game.targetX, game.targetY, TARGET_RADIUS_PX, 0, Math.PI * 2);
+      ctx.fillStyle = ringFill;
+      ctx.fill();
+      ctx.lineWidth = 3;
+      ctx.strokeStyle = ringStroke;
+      ctx.stroke();
+      ctx.beginPath();
+      ctx.moveTo(game.targetX - 8, game.targetY);
+      ctx.lineTo(game.targetX + 8, game.targetY);
+      ctx.moveTo(game.targetX, game.targetY - 8);
+      ctx.lineTo(game.targetX, game.targetY + 8);
+      ctx.lineWidth = 2;
+      ctx.strokeStyle = "rgba(255, 255, 255, 0.9)";
+      ctx.stroke();
+      ctx.restore();
+    }
+
+    function drawIndexFingertipHighlight(ctx, transform, landmarks) {
+      if (!game.isRunning) return;
+      const tip = landmarks[INDEX_FINGER_TIP_INDEX];
+      if (!tip) return;
+      const point = projectLandmark(tip, transform);
+      ctx.save();
+      ctx.beginPath();
+      ctx.arc(point.x, point.y, 22, 0, Math.PI * 2);
+      ctx.fillStyle = "rgba(255, 80, 80, 0.9)";
+      ctx.fill();
+      ctx.lineWidth = 3;
+      ctx.strokeStyle = "rgba(255, 255, 255, 0.95)";
+      ctx.stroke();
+      ctx.restore();
+    }
 
     function clamp(value, min, max) {
       return Math.min(max, Math.max(min, value));
@@ -608,7 +726,7 @@
         cameraToggleBtn.disabled = true;
         return;
       }
-      if (!gestureRecognizer) {
+      if (!handLandmarker) {
         cameraToggleBtn.textContent = "Loading model...";
         cameraToggleBtn.disabled = true;
         return;
@@ -631,11 +749,11 @@
 
       if (permissionState === "granted") {
         await refreshCameraSourceOptions();
-        if (requiresPermissionReload && !webcamRunning && gestureRecognizer && !cameraStartInFlight) {
+        if (requiresPermissionReload && !webcamRunning && handLandmarker && !cameraStartInFlight) {
           requiresPermissionReload = false;
           updateCameraToggleButton();
           setStatus("Camera permission granted. Starting camera...", "ready");
-          setPlaceholderHint("Camera access restored. Starting hand tracking and gesture recognition.");
+          setPlaceholderHint("Camera access restored. Starting hand tracking.");
           await startCamera();
           return;
         }
@@ -644,7 +762,7 @@
       }
 
       if (permissionState === "prompt") {
-        if (requiresPermissionReload && !webcamRunning && gestureRecognizer) {
+        if (requiresPermissionReload && !webcamRunning && handLandmarker) {
           setStatus("Camera permission reset. Click Retry Camera to continue.", "ready");
           setPlaceholderHint("Camera access is ready to be requested again.");
         }
@@ -931,10 +1049,10 @@
     }
 
     function resetGestureOutput() {
-      gestureLabelEl.textContent = "--";
-      gestureConfidenceEl.textContent = "--";
       handCountEl.textContent = "0";
       fpsEl.textContent = "0";
+      if (gestureLabelEl) gestureLabelEl.textContent = "Hand";
+      if (gestureConfidenceEl) gestureConfidenceEl.textContent = "0";
     }
 
     function resizeCanvasToViewport() {
@@ -998,8 +1116,15 @@
     }
 
     function projectLandmark(landmark, transform) {
+      const x = landmark.x * transform.width;
+      if (MIRROR_VIDEO) {
+        return {
+          x: transform.width - x,
+          y: landmark.y * transform.height,
+        };
+      }
       return {
-        x: landmark.x * transform.width,
+        x,
         y: landmark.y * transform.height,
       };
     }
@@ -1100,36 +1225,14 @@
     function updateGestureOutput(results) {
       const hands = results.landmarks || [];
       handCountEl.textContent = String(hands.length);
-
-      let topGesture = null;
-      for (const gestureList of results.gestures || []) {
-        const candidate = gestureList[0];
-        if (!candidate) continue;
-        if (!topGesture || candidate.score > topGesture.score) {
-          topGesture = candidate;
-        }
-      }
-
-      if (topGesture) {
-        gestureLabelEl.textContent = topGesture.categoryName;
-        gestureConfidenceEl.textContent = `${(topGesture.score * 100).toFixed(1)}%`;
-        return;
-      }
-
-      if (hands.length > 0) {
-        gestureLabelEl.textContent = "No known gesture";
-        gestureConfidenceEl.textContent = "--";
-        return;
-      }
-
-      gestureLabelEl.textContent = "--";
-      gestureConfidenceEl.textContent = "--";
+      if (gestureLabelEl) gestureLabelEl.textContent = "Hand";
+      if (gestureConfidenceEl) gestureConfidenceEl.textContent = `${hands.length}`;
     }
 
     function stopCamera(
       statusMessage = "",
       tone = "info",
-      placeholderMessage = "Model ready. Enable camera to begin hand tracking and gesture recognition."
+      placeholderMessage = "Model ready. Enable camera to begin hand tracking."
     ) {
       webcamRunning = false;
       requiresPermissionReload = false;
@@ -1153,6 +1256,9 @@
       ctx.clearRect(0, 0, canvas.width, canvas.height);
       smoothedHands.clear();
       frameCount = 0;
+      game.isRunning = false;
+      scoreEl.textContent = "0";
+      timerEl.textContent = `${GAME_DURATION_SECONDS.toFixed(1)}s`;
       resetGestureOutput();
       if (statusMessage) {
         setStatus(statusMessage, tone);
@@ -1189,7 +1295,7 @@
     }
 
     async function startCamera() {
-      if (!gestureRecognizer) {
+      if (!handLandmarker) {
         setStatus("Model still loading. Please wait...", "info");
         return;
       }
@@ -1267,7 +1373,7 @@
     }
 
     function renderFrame() {
-      if (!webcamRunning || !gestureRecognizer || !inferenceCtx) return;
+      if (!webcamRunning || !handLandmarker || !inferenceCtx) return;
 
       const nowMs = performance.now();
       if (video.currentTime !== lastVideoTime) {
@@ -1282,10 +1388,18 @@
 
         inferenceCtx.clearRect(0, 0, coverTransform.targetWidth, coverTransform.targetHeight);
         drawCoveredVideo(inferenceCtx, coverTransform);
-        const results = gestureRecognizer.recognizeForVideo(inferenceCanvas, nowMs);
+        const results = handLandmarker.detectForVideo(inferenceCanvas, nowMs);
         ctx.clearRect(0, 0, canvas.width, canvas.height);
         if (showVideoFeed) {
-          ctx.drawImage(inferenceCanvas, 0, 0, canvas.width, canvas.height);
+          if (MIRROR_VIDEO) {
+            ctx.save();
+            ctx.translate(canvas.width, 0);
+            ctx.scale(-1, 1);
+            ctx.drawImage(inferenceCanvas, 0, 0, canvas.width, canvas.height);
+            ctx.restore();
+          } else {
+            ctx.drawImage(inferenceCanvas, 0, 0, canvas.width, canvas.height);
+          }
         }
         if (results.landmarks?.length) {
           const activeKeys = new Set();
@@ -1305,6 +1419,29 @@
           smoothedHands.clear();
         }
         updateGestureOutput(results);
+
+        if (webcamRunning && handLandmarker && !game.isRunning && !modelLoadFailed) {
+          startGame();
+        }
+
+        if (game.isRunning && results.landmarks?.length) {
+          const primaryLandmarks = results.landmarks[0];
+          const tip = primaryLandmarks[INDEX_FINGER_TIP_INDEX];
+          if (tip) {
+            const point = projectLandmark(tip, frameTransform);
+            if (isInsideTarget(point.x, point.y)) {
+              game.score += 1;
+              scoreEl.textContent = String(game.score);
+              game.flashUntilMs = performance.now() + 220;
+              spawnTarget();
+            }
+          }
+        }
+
+        updateGameUI(nowMs);
+        drawIndexFingertipHighlight(ctx, frameTransform, results.landmarks?.[0] ?? []);
+        drawTarget(ctx);
+
         frameCount += 1;
         if (nowMs - lastFpsTime >= 1000) {
           fpsEl.textContent = String(frameCount);
@@ -1316,9 +1453,9 @@
       animationFrameId = requestAnimationFrame(renderFrame);
     }
 
-    async function initGestureRecognizer() {
-      setStatus("Loading hand and gesture model...", "info");
-      setPlaceholderHint("Loading hand and gesture model...");
+    async function initHandLandmarker() {
+      setStatus("Loading hand landmark model...", "info");
+      setPlaceholderHint("Loading hand landmark model...");
 
       try {
         modelLoadFailed = false;
@@ -1327,26 +1464,27 @@
           "../../vendor/mediapipe/tasks-vision/wasm"
         );
 
-        gestureRecognizer = await GestureRecognizer.createFromOptions(vision, {
+        handLandmarker = await HandLandmarker.createFromOptions(vision, {
           baseOptions: {
-            modelAssetPath: GESTURE_RECOGNIZER_MODEL_PATH
+            modelAssetPath: HAND_LANDMARKER_MODEL_PATH,
+            delegate: "GPU",
           },
           runningMode: "VIDEO",
-          numHands: 2
+          numHands: 1,
         });
 
         modelLoadFailed = false;
         requiresPermissionReload = false;
         updateCameraToggleButton();
         setStatus("Model ready. Enable camera to begin.", "ready");
-        setPlaceholderHint("Model ready. Enable camera to begin hand tracking and gesture recognition.");
+        setPlaceholderHint("Model ready. Enable camera to begin hand tracking.");
         await installCameraPermissionWatcher();
         await refreshCameraSourceOptions();
       } catch (error) {
         modelLoadFailed = true;
         updateCameraToggleButton();
-        setStatus("Failed to load hand and gesture model.", "error");
-        setPlaceholderHint("Hand and gesture model failed to load. Reload the page to retry.");
+        setStatus("Failed to load hand landmark model.", "error");
+        setPlaceholderHint("Hand landmark model failed to load. Reload the page to retry.");
         console.error(error);
       }
     }
@@ -1444,7 +1582,7 @@
     setNodeSize(nodeSizeInput.value);
     updateSmoothingLabel();
     resetGestureOutput();
-    initGestureRecognizer();
+    initHandLandmarker();
   </script>
 </body>
 </html>
