@@ -13,6 +13,9 @@ everyone can run the same browser and camera test on their own machine.
 - `sims/camera-preferences.js`: shared camera selection persistence helper.
 - `vendor/mediapipe/`: vendored MediaPipe Tasks Vision bundle, WASM files, and
   local model files.
+- `vendor/mediapipe-docs/`: vendored MediaPipe Tasks Vision reference
+  documentation (task guides for the four landmarkers, CC BY 4.0 from
+  Google AI Edge / MediaPipe).
 
 ## How students should run it
 
