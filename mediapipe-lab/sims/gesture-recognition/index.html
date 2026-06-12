@@ -384,6 +384,28 @@
       line-height: 1.4;
     }
 
+    .stats-stack {
+      display: grid;
+      gap: 6px;
+    }
+
+    .stat-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 7px 10px;
+      border-radius: 6px;
+      background: rgba(0, 0, 0, 0.2);
+      color: #9a9aa3;
+      font-size: 12px;
+    }
+
+    .stat-value {
+      color: #f8fafc;
+      font-family: ui-monospace, "SFMono-Regular", Menlo, Monaco, Consolas, monospace;
+      font-weight: 600;
+    }
+
     @media (max-width: 900px) {
       body {
         padding: 10px;
@@ -440,24 +462,8 @@
           <span id="gesture-label" class="chip-value">Hand</span>
         </div>
         <div class="chip">
-          <span class="chip-label">Hands</span>
-          <span id="gesture-confidence" class="chip-value">0</span>
-        </div>
-        <div class="chip">
-          <span class="chip-label">Hands</span>
-          <span id="hand-count" class="chip-value">0</span>
-        </div>
-        <div class="chip">
           <span class="chip-label">FPS</span>
           <span id="fps" class="chip-value">0</span>
-        </div>
-        <div class="chip">
-          <span class="chip-label">Score</span>
-          <span id="score-readout" class="chip-value">0</span>
-        </div>
-        <div class="chip">
-          <span class="chip-label">Time</span>
-          <span id="timer-readout" class="chip-value">30.0s</span>
         </div>
       </div>
     </div>
@@ -495,6 +501,24 @@
           <button type="button" class="swatch" data-color="#f8fafc" style="--swatch:#f8fafc" aria-label="White"></button>
         </div>
       </div>
+
+      <section class="control-block">
+        <span class="group-title">Game</span>
+        <div class="stats-stack">
+          <div class="stat-row">
+            <span>Score</span>
+            <span id="score-readout" class="stat-value">0</span>
+          </div>
+          <div class="stat-row">
+            <span>Time</span>
+            <span id="timer-readout" class="stat-value">30.0s</span>
+          </div>
+          <div class="stat-row">
+            <span>Hands</span>
+            <span id="gesture-confidence" class="stat-value">0</span>
+          </div>
+        </div>
+      </section>
 
       <div id="free-color-group">
         <div class="free-header">
@@ -564,7 +588,6 @@
 
     const gestureLabelEl = document.getElementById("gesture-label");
     const gestureConfidenceEl = document.getElementById("gesture-confidence");
-    const handCountEl = document.getElementById("hand-count");
     const fpsEl = document.getElementById("fps");
     const scoreEl = document.getElementById("score-readout");
     const timerEl = document.getElementById("timer-readout");
@@ -1049,7 +1072,6 @@
     }
 
     function resetGestureOutput() {
-      handCountEl.textContent = "0";
       fpsEl.textContent = "0";
       if (gestureLabelEl) gestureLabelEl.textContent = "Hand";
       if (gestureConfidenceEl) gestureConfidenceEl.textContent = "0";
@@ -1224,7 +1246,6 @@
 
     function updateGestureOutput(results) {
       const hands = results.landmarks || [];
-      handCountEl.textContent = String(hands.length);
       if (gestureLabelEl) gestureLabelEl.textContent = "Hand";
       if (gestureConfidenceEl) gestureConfidenceEl.textContent = `${hands.length}`;
     }
