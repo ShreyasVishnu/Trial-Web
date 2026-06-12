@@ -406,6 +406,19 @@
       font-weight: 600;
     }
 
+    .stats-card {
+      display: grid;
+      gap: 8px;
+      padding: 12px;
+      border-radius: 8px;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      background: rgba(255, 255, 255, 0.03);
+    }
+
+    .stats-card .group-title {
+      letter-spacing: 0.08em;
+    }
+
     @media (max-width: 900px) {
       body {
         padding: 10px;
@@ -455,20 +468,35 @@
       <canvas id="overlay"></canvas>
 
       <div id="status-banner">Loading hand landmark model...</div>
-
-      <div id="gesture-readout">
-        <div class="chip">
-          <span class="chip-label">Mode</span>
-          <span id="gesture-label" class="chip-value">Hand</span>
-        </div>
-        <div class="chip">
-          <span class="chip-label">FPS</span>
-          <span id="fps" class="chip-value">0</span>
-        </div>
-      </div>
     </div>
 
     <aside id="controls-panel">
+      <section class="stats-card">
+        <span class="group-title">Stats</span>
+        <div class="stats-stack">
+          <div class="stat-row">
+            <span>Mode</span>
+            <span id="gesture-label" class="stat-value">Hand</span>
+          </div>
+          <div class="stat-row">
+            <span>Score</span>
+            <span id="score-readout" class="stat-value">0</span>
+          </div>
+          <div class="stat-row">
+            <span>Time</span>
+            <span id="timer-readout" class="stat-value">30.0s</span>
+          </div>
+          <div class="stat-row">
+            <span>Hands</span>
+            <span id="gesture-confidence" class="stat-value">0</span>
+          </div>
+          <div class="stat-row">
+            <span>FPS</span>
+            <span id="fps" class="stat-value">0</span>
+          </div>
+        </div>
+      </section>
+
       <button id="camera-toggle" type="button" disabled>Enable Camera</button>
 
       <div class="camera-select-group">
@@ -501,24 +529,6 @@
           <button type="button" class="swatch" data-color="#f8fafc" style="--swatch:#f8fafc" aria-label="White"></button>
         </div>
       </div>
-
-      <section class="control-block">
-        <span class="group-title">Game</span>
-        <div class="stats-stack">
-          <div class="stat-row">
-            <span>Score</span>
-            <span id="score-readout" class="stat-value">0</span>
-          </div>
-          <div class="stat-row">
-            <span>Time</span>
-            <span id="timer-readout" class="stat-value">30.0s</span>
-          </div>
-          <div class="stat-row">
-            <span>Hands</span>
-            <span id="gesture-confidence" class="stat-value">0</span>
-          </div>
-        </div>
-      </section>
 
       <div id="free-color-group">
         <div class="free-header">
