@@ -494,6 +494,14 @@
             <span>FPS</span>
             <span id="fps" class="stat-value">0</span>
           </div>
+          <div class="stat-row">
+            <span>Latency</span>
+            <span id="inference-latency" class="stat-value">0.0 ms</span>
+          </div>
+          <div class="stat-row">
+            <span>Infer/s</span>
+            <span id="inferences-per-sec" class="stat-value">0</span>
+          </div>
         </div>
       </section>
 
@@ -599,6 +607,8 @@
     const gestureLabelEl = document.getElementById("gesture-label");
     const gestureConfidenceEl = document.getElementById("gesture-confidence");
     const fpsEl = document.getElementById("fps");
+    const inferenceLatencyEl = document.getElementById("inference-latency");
+    const inferencesPerSecEl = document.getElementById("inferences-per-sec");
     const scoreEl = document.getElementById("score-readout");
     const timerEl = document.getElementById("timer-readout");
 
@@ -625,6 +635,10 @@
     let lastVideoTime = -1;
     let frameCount = 0;
     let lastFpsTime = performance.now();
+    const inferenceLatencyHistory = [];
+    const INFERENCE_LATENCY_WINDOW = 30;
+    let inferenceCount = 0;
+    let inferencesPerSecond = 0;
     let requiresPermissionReload = false;
     let cameraPermissionStatus = null;
     let requiresExternalBrowser = false;
@@ -1083,6 +1097,8 @@
 
     function resetGestureOutput() {
       fpsEl.textContent = "0";
+      inferenceLatencyEl.textContent = "0.0 ms";
+      inferencesPerSecEl.textContent = "0";
       if (gestureLabelEl) gestureLabelEl.textContent = "Hand";
       if (gestureConfidenceEl) gestureConfidenceEl.textContent = "0";
     }
@@ -1374,7 +1390,12 @@
         lastVideoTime = -1;
         frameCount = 0;
         lastFpsTime = performance.now();
+        inferenceLatencyHistory.length = 0;
+        inferenceCount = 0;
+        inferencesPerSecond = 0;
         fpsEl.textContent = "0";
+        inferenceLatencyEl.textContent = "0.0 ms";
+        inferencesPerSecEl.textContent = "0";
         updateCameraToggleButton();
         placeholder.classList.add("hidden");
 
@@ -1419,7 +1440,14 @@
 
         inferenceCtx.clearRect(0, 0, coverTransform.targetWidth, coverTransform.targetHeight);
         drawCoveredVideo(inferenceCtx, coverTransform);
+        const inferenceStartedAt = performance.now();
         const results = handLandmarker.detectForVideo(inferenceCanvas, nowMs);
+        const inferenceLatencyMs = performance.now() - inferenceStartedAt;
+        inferenceLatencyHistory.push(inferenceLatencyMs);
+        if (inferenceLatencyHistory.length > INFERENCE_LATENCY_WINDOW) {
+          inferenceLatencyHistory.shift();
+        }
+        inferenceCount += 1;
         ctx.clearRect(0, 0, canvas.width, canvas.height);
         if (showVideoFeed) {
           if (MIRROR_VIDEO) {
@@ -1476,8 +1504,16 @@
         frameCount += 1;
         if (nowMs - lastFpsTime >= 1000) {
           fpsEl.textContent = String(frameCount);
+          inferencesPerSecond = (inferenceCount * 1000) / (nowMs - lastFpsTime);
+          inferencesPerSecEl.textContent = inferencesPerSecond.toFixed(1);
+          inferenceCount = 0;
           frameCount = 0;
           lastFpsTime = nowMs;
+        }
+        if (inferenceLatencyHistory.length > 0) {
+          const sum = inferenceLatencyHistory.reduce((a, b) => a + b, 0);
+          const avg = sum / inferenceLatencyHistory.length;
+          inferenceLatencyEl.textContent = `${avg.toFixed(1)} ms`;
         }
       }
 
