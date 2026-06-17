@@ -640,6 +640,7 @@
     let inferenceCount = 0;
     let inferencesPerSecond = 0;
     const INFERENCE_EVERY_N_FRAMES = 2;
+    const INFERENCE_SCALE = 0.5;
     let videoFrameIndex = 0;
     let lastResults = null;
     let requiresPermissionReload = false;
@@ -1112,18 +1113,18 @@
       const pixelRatio = window.devicePixelRatio || 1;
       const width = Math.max(1, Math.round(rect.width * pixelRatio));
       const height = Math.max(1, Math.round(rect.height * pixelRatio));
+      const inferenceWidth = Math.max(1, Math.round(width * INFERENCE_SCALE));
+      const inferenceHeight = Math.max(1, Math.round(height * INFERENCE_SCALE));
       if (canvas.width === width && canvas.height === height) return;
       canvas.width = width;
       canvas.height = height;
-      inferenceCanvas.width = width;
-      inferenceCanvas.height = height;
+      inferenceCanvas.width = inferenceWidth;
+      inferenceCanvas.height = inferenceHeight;
     }
 
-    function computeCoverTransform() {
+    function computeCoverTransformForTarget(targetWidth, targetHeight) {
       const sourceWidth = video.videoWidth;
       const sourceHeight = video.videoHeight;
-      const targetWidth = canvas.width;
-      const targetHeight = canvas.height;
       if (!sourceWidth || !sourceHeight || !targetWidth || !targetHeight) {
         return null;
       }
@@ -1141,6 +1142,10 @@
         offsetX: (targetWidth - drawnWidth) / 2,
         offsetY: (targetHeight - drawnHeight) / 2,
       };
+    }
+
+    function computeCoverTransform() {
+      return computeCoverTransformForTarget(canvas.width, canvas.height);
     }
 
     function computeFrameTransform() {
@@ -1455,13 +1460,14 @@
         resizeCanvasToViewport();
         const frameTransform = computeFrameTransform();
         const coverTransform = computeCoverTransform();
-        if (!frameTransform || !coverTransform) {
+        const inferenceCoverTransform = computeCoverTransformForTarget(inferenceCanvas.width, inferenceCanvas.height);
+        if (!frameTransform || !coverTransform || !inferenceCoverTransform) {
           animationFrameId = requestAnimationFrame(renderFrame);
           return;
         }
 
-        inferenceCtx.clearRect(0, 0, coverTransform.targetWidth, coverTransform.targetHeight);
-        drawCoveredVideo(inferenceCtx, coverTransform);
+        inferenceCtx.clearRect(0, 0, inferenceCoverTransform.targetWidth, inferenceCoverTransform.targetHeight);
+        drawCoveredVideo(inferenceCtx, inferenceCoverTransform);
 
         const shouldRunInference = (videoFrameIndex % INFERENCE_EVERY_N_FRAMES) === 0;
         if (shouldRunInference) {
