@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="icon" href="data:,">
+  <title>CV Performance — Frame Scheduling</title>
+  <style>
+    :root { color-scheme: dark; --bg:#0b0d12; --panel:#121620; --line:#283044; --text:#edf1f7; --muted:#aab4c5; --accent:#8ab4ff; --warn:#f4c56a; --good:#72d6a0; }
+    * { box-sizing: border-box; }
+    body { margin:0; background:var(--bg); color:var(--text); font:16px/1.6 system-ui,-apple-system,sans-serif; }
+    header, main { width:min(920px, calc(100% - 32px)); margin:auto; }
+    header { padding:64px 0 32px; border-bottom:1px solid var(--line); }
+    main { padding:24px 0 64px; }
+    h1 { margin:.2rem 0 .5rem; font-size:clamp(2rem,6vw,4.2rem); line-height:1; letter-spacing:-.04em; }
+    h2 { margin:2rem 0 .6rem; font-size:1.35rem; }
+    p, li { max-width:76ch; }
+    .eyebrow { color:var(--accent); font-weight:700; letter-spacing:.12em; text-transform:uppercase; }
+    .lede { color:var(--muted); font-size:1.15rem; }
+    .box { margin:18px 0; padding:18px 20px; background:var(--panel); border:1px solid var(--line); border-radius:10px; }
+    .required { border-left:4px solid var(--good); }
+    .warning { border-left:4px solid var(--warn); }
+    code { color:#c9dcff; background:#0a0c11; padding:.1em .35em; border-radius:4px; }
+    a { color:var(--accent); }
+    li + li { margin-top:.45rem; }
+    .path { overflow-wrap:anywhere; }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="eyebrow">July 15 · Computer vision · 90 minutes</div>
+    <h1>Stop polling for frames.</h1>
+    <p class="lede">Your model is already throttled and downscaled. Today you remove work around the model without changing its accuracy settings.</p>
+  </header>
+  <main>
+    <section class="box warning">
+      <strong>Why this matters.</strong> MediaPipe's Web <code>detectForVideo()</code> call is synchronous and blocks the main thread. Every extra layout read, canvas copy, and DOM write in that same loop competes with input and drawing.
+    </section>
+
+    <h2>What the audit found</h2>
+    <ul>
+      <li><code>renderFrame()</code> is driven by <code>requestAnimationFrame</code>, then polls <code>video.currentTime</code> to learn whether a camera frame exists (lines 1437–1541).</li>
+      <li><code>resizeCanvasToViewport()</code> reads <code>getBoundingClientRect()</code> inside the frame loop (line 1460), even though metadata, resize, orientation, and visual-viewport handlers already resize it (lines 1652–1663).</li>
+      <li>The video is copied into the inference canvas on every camera frame (lines 1469–1470), while inference only runs every second frame (lines 1472–1475).</li>
+      <li>Latency is reduced and written to the DOM on every loop (lines 1451–1455); gesture and timer text are also updated per camera frame.</li>
+      <li>The visibility handler checks permissions when the page returns, but it does not explicitly pause the camera pipeline while hidden (lines 1658–1662).</li>
+      <li>The June 16 result was 30 render FPS, 44 ms inference, and 14 IPS after downscaling. That is historical context, not today's baseline.</li>
+    </ul>
+
+    <section class="box required">
+      <strong>Required change: make the camera drive the loop.</strong>
+      Replace the animation-frame polling loop with <code>HTMLVideoElement.requestVideoFrameCallback()</code>. Schedule the next callback only while the camera is running, cancel it when the camera stops, and move canvas sizing out of the hot loop. If the API is unavailable, show which scheduler is active; do not silently change behavior.
+    </section>
+
+    <h2>Do not touch these knobs</h2>
+    <p>Keep <code>INFERENCE_SCALE</code>, <code>INFERENCE_EVERY_N_FRAMES</code>, model, delegate, and confidence settings unchanged. You already tested those. This experiment isolates scheduling and housekeeping.</p>
+
+    <h2>Protocol</h2>
+    <ol>
+      <li>Start <code>python3 -m http.server 5174</code> from the repo root and open <span class="path"><code>http://localhost:5174/mediapipe-lab/sims/gesture-recognition/</code></span>.</li>
+      <li>Fill in <a href="plan.md">plan.md</a> before code changes.</li>
+      <li>Warm up for 10 seconds. Run five 10-second trials with the same hand distance and lighting. Record every run in <a href="results.md">results.md</a>.</li>
+      <li>Make the scheduler change. Repeat the same five trials.</li>
+      <li>Play one 30-second finger-target round before and after. A faster loop that misses targets is not a win.</li>
+    </ol>
+
+    <h2>Done</h2>
+    <ul>
+      <li>There is no animation-frame/current-time polling path left.</li>
+      <li>Canvas sizing happens on actual size changes, not each camera frame.</li>
+      <li>Five before and five after runs are recorded with median and spread.</li>
+      <li>The finger game still works and the trade-off is stated honestly.</li>
+      <li>You write <code>journal/2026-07-15.md</code> in your own words, then commit.</li>
+    </ul>
+    <p>API reference: <a href="https://developer.mozilla.org/docs/Web/API/HTMLVideoElement/requestVideoFrameCallback">requestVideoFrameCallback</a> and Google's <a href="https://developers.google.com/edge/mediapipe/solutions/vision/hand_landmarker/web_js">MediaPipe Hand Landmarker Web guide</a>.</p>
+  </main>
+</body>
+</html>
