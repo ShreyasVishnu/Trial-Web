@@ -16,7 +16,7 @@ const extracurriculars = [
   {
     title: 'Archery Team Captain',
     tag: 'Athletics · Leadership',
-    description: 'Led the middle school archery team for 3 years. 2-time District 1st Place Champion. Promoted confidence, adaptability, and a growth mindset among teammates.',
+    description: 'Led the middle school archery team for 3 years. 2-time District 1st Place Champion (2023, 2024). Completed a Leadership Development Corps program led by a retired military veteran, deepening understanding of leadership principles.',
     icon: '🏹'
   },
   {
@@ -48,6 +48,30 @@ const extracurriculars = [
     tag: 'Athletics',
     description: 'Active member at CLHS, participating in recreational and competitive play.',
     icon: '🏸'
+  },
+  {
+    title: 'Red Cross Club',
+    tag: 'Community Service',
+    description: 'Active member since 2024, supporting blood drives, disaster preparedness, and health education initiatives within the school and local community.',
+    icon: '🩸'
+  },
+  {
+    title: 'Fencing — Mixed Épée',
+    tag: 'Athletics',
+    description: 'Earned 3rd Place in Mixed Épée Fencing (2023). Developed discipline, strategy, and quick decision-making through competitive fencing.',
+    icon: '⚔️'
+  },
+  {
+    title: 'SSI Scuba Diving',
+    tag: 'Certification',
+    description: 'SSI Certified Freshwater Scuba Diver. Completed open-water training and certification through Scuba Schools International.',
+    icon: '🤿'
+  },
+  {
+    title: 'MLS Summer Immersion Program',
+    tag: 'UTMB · Clinical Lab Science',
+    description: 'Selected for the week-long Medical Laboratory Science Summer Immersion Program at UTMB. Hands-on training in microbiology, hematology, chemistry, blood bank, and molecular biology lab procedures.',
+    icon: '🧪'
   }
 ];
 
@@ -63,6 +87,12 @@ const researchProjects = [
     tag: 'Microbiology · BSL2',
     description: 'Investigated Ivacaftor and Auranofin as treatments for drug-resistant Salmonella Typhimurium. Found Auranofin reduced bacterial growth ~70% at 128 µg/ml. Ivacaftor–Pentamidine combination achieved >75% growth reduction. Won District 4th Place and qualified for SEFH.',
     icon: '🦠'
+  },
+  {
+    title: 'Rat Frustration Study',
+    tag: 'Behavioral Neuroscience · UTMB',
+    description: 'Investigating lever-press duration as a behavioral measure of frustration in rat models of sucrose and drug reinforcement with Dr. Thomas Green at UTMB. Building on prior work showing bar-press duration is an independent behavioral construct distinct from craving.',
+    icon: '🐀'
   }
 ];
 

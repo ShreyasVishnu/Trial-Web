@@ -1,4 +1,6 @@
 export const highlights = [
+  { date: '2026-07-20', type: 'milestone', title: 'MLS SIP at UTMB', detail: 'Selected for the week-long Medical Laboratory Science Summer Immersion Program — hands-on lab procedures, microbiology, hematology, chemistry, and blood bank techniques.' },
+  { date: '2026-06-01', type: 'research', title: 'Rat Frustration Study Begins', detail: 'Started working with Dr. Thomas Green at UTMB on a rat model studying lever-press duration as a behavioral measure of frustration in sucrose and drug reinforcement.' },
   { date: '2026-03-07', type: 'research', title: 'SEFH Judging', detail: 'Presented the Year 2 lung cancer cytotoxicity study at the Science and Engineering Fair of Houston.' },
   { date: '2026-02-14', type: 'milestone', title: 'SEFH Qualifier — Year 2', detail: 'Qualified for SEFH again with the updated Year 2 lung cancer study.' },
   { date: '2026-01-18', type: 'event', title: 'Archery Season Starts', detail: 'Kicked off the spring archery season as team captain.' },
@@ -16,6 +18,7 @@ export const highlights = [
 ];
 
 export const upcoming = [
+  { date: '2026-08-15', label: 'Ongoing', title: 'AI & Deep Learning', detail: 'Learning AI-assisted coding through project-based lessons — computer vision with MediaPipe, frame scheduling optimization, and the nine judgment skills for working effectively with LLMs.' },
   { date: '2026-08-15', label: 'Aug 2026', title: 'Junior Year Begins', detail: '11th grade at Clear Lake High School — focus on college preparation, research, and continued service.' },
   { date: '2026-10-01', label: 'Fall 2026', title: 'Submit Research Paper', detail: 'Write and submit the Year 2 lung cancer cytotoxicity study for publication in a student science journal.' },
   { date: '2026-11-15', label: 'Nov 2026', title: 'Eagle Scout Rank', detail: 'Complete remaining merit badges and leadership service project to achieve the highest rank in Boy Scouts.' },
