@@ -6,6 +6,7 @@
   "scripts": {
     "sass": "sass css/style.scss css/style.css",
     "sass:watch": "sass --watch css/style.scss css/style.css",
+    "bump": "bash scripts/bump-version.sh",
     "start": "npx serve .",
     "test": "playwright test",
     "test:headed": "playwright test --headed"
