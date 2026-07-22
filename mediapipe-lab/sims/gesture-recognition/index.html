@@ -439,18 +439,70 @@
 
       #status-banner {
         max-width: calc(100% - 32px);
+        font-size: 11px;
+        top: 10px;
+        left: 10px;
       }
 
       #controls-panel {
         width: min(1040px, 100%);
         flex: initial;
         border-radius: 6px;
+        max-height: 50vh;
+        overflow-y: auto;
       }
 
       #gesture-readout {
-        bottom: 16px;
-        left: 16px;
-        max-width: calc(100% - 32px);
+        bottom: 10px;
+        left: 10px;
+        max-width: calc(100% - 20px);
+      }
+
+      .chip {
+        min-width: 0;
+        font-size: 11px;
+        padding: 8px 10px;
+        gap: 10px;
+      }
+
+      #swatch-grid {
+        grid-template-columns: repeat(6, 1fr);
+        gap: 4px;
+      }
+    }
+
+    @media (max-width: 480px) {
+      #container {
+        aspect-ratio: 3 / 4;
+      }
+
+      #controls-panel {
+        max-height: 40vh;
+        padding: 8px;
+      }
+
+      #gesture-readout {
+        gap: 6px;
+      }
+
+      .chip {
+        padding: 6px 8px;
+        font-size: 10px;
+        gap: 6px;
+      }
+
+      #swatch-grid {
+        grid-template-columns: repeat(4, 1fr);
+        gap: 3px;
+      }
+
+      .stats-stack {
+        gap: 4px;
+      }
+
+      .stat-row {
+        padding: 5px 8px;
+        font-size: 11px;
       }
     }
   </style>
