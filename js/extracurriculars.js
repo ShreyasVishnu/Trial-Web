@@ -54,8 +54,11 @@ export function initExtracurriculars() {
     }, 350);
   }
 
+  let scrollCleanup = null;
+
   function showBranch() {
     content.classList.remove('content-visible');
+    if (scrollCleanup) { scrollCleanup(); scrollCleanup = null; }
 
     setTimeout(() => {
       content.style.display = 'none';
@@ -65,9 +68,21 @@ export function initExtracurriculars() {
     }, 300);
   }
 
+  function initBackButtonScroll() {
+    const threshold = 60;
+    function onScroll() {
+      backBtn.classList.toggle('back-btn--compact', window.scrollY > threshold);
+    }
+    window.addEventListener('scroll', onScroll, { passive: true });
+    onScroll();
+    scrollCleanup = () => window.removeEventListener('scroll', onScroll);
+  }
+
   $$('.branch-card').forEach(card => {
     card.addEventListener('click', () => showCategory(card.dataset.category));
   });
 
   backBtn.addEventListener('click', showBranch);
+
+  initBackButtonScroll();
 }

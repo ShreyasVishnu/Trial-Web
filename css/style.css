@@ -1449,14 +1449,14 @@ main.page-exit--backward {
   align-items: center;
   gap: var(--spacing-2);
   padding: var(--spacing-2) var(--spacing-4);
-  background: color-mix(in srgb, var(--color-background) 75%, transparent);
+  background: color-mix(in srgb, var(--color-background) 65%, transparent);
   border: 1px solid var(--color-border);
   color: var(--color-text-secondary);
   font-size: var(--font-size-sm);
   font-weight: 500;
   cursor: pointer;
-  border-radius: var(--radius-md);
-  transition: border-color var(--transition-base), color var(--transition-base), background var(--transition-base);
+  border-radius: var(--radius-full);
+  transition: border-color var(--transition-base), color var(--transition-base), background var(--transition-base), padding var(--transition-base), gap var(--transition-base), border-radius var(--transition-base);
   margin-bottom: var(--spacing-8);
   text-transform: uppercase;
   letter-spacing: 0.5px;
@@ -1466,11 +1466,28 @@ main.page-exit--backward {
   backdrop-filter: blur(8px);
   -webkit-backdrop-filter: blur(8px);
   width: fit-content;
+  overflow: hidden;
 }
 .back-btn:hover {
   color: var(--color-text);
   border-color: var(--color-text);
-  background: color-mix(in srgb, var(--color-background) 95%, transparent);
+  background: color-mix(in srgb, var(--color-background) 85%, transparent);
+}
+.back-btn.back-btn--compact {
+  padding: var(--spacing-2);
+  gap: 0;
+  background: color-mix(in srgb, var(--color-background) 40%, transparent);
+  border-color: transparent;
+  color: var(--color-text-muted);
+  min-width: 0;
+}
+.back-btn.back-btn--compact span {
+  display: none;
+}
+.back-btn.back-btn--compact:hover {
+  background: color-mix(in srgb, var(--color-background) 60%, transparent);
+  border-color: var(--color-border);
+  color: var(--color-text-secondary);
 }
 
 .footer {
