@@ -1449,21 +1449,28 @@ main.page-exit--backward {
   align-items: center;
   gap: var(--spacing-2);
   padding: var(--spacing-2) var(--spacing-4);
-  background: transparent;
+  background: color-mix(in srgb, var(--color-background) 75%, transparent);
   border: 1px solid var(--color-border);
   color: var(--color-text-secondary);
   font-size: var(--font-size-sm);
   font-weight: 500;
   cursor: pointer;
   border-radius: var(--radius-md);
-  transition: border-color var(--transition-base), color var(--transition-base);
+  transition: border-color var(--transition-base), color var(--transition-base), background var(--transition-base);
   margin-bottom: var(--spacing-8);
   text-transform: uppercase;
   letter-spacing: 0.5px;
+  position: sticky;
+  top: calc(var(--header-height) + var(--spacing-4));
+  z-index: 10;
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  width: fit-content;
 }
 .back-btn:hover {
   color: var(--color-text);
   border-color: var(--color-text);
+  background: color-mix(in srgb, var(--color-background) 95%, transparent);
 }
 
 .footer {

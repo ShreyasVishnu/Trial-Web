@@ -68,6 +68,12 @@ const extracurriculars = [
     icon: '🤿'
   },
   {
+    title: 'STEM Siblings Club — Mentor',
+    tag: 'Leadership · Mentorship',
+    description: 'Planned and coordinated hands-on STEM activities for elementary students. Served as a positive role model, adapting demonstrations for different age groups and fostering curiosity in a structured after-school environment.',
+    icon: '🧪'
+  },
+  {
     title: 'MLS Summer Immersion Program',
     tag: 'UTMB · Clinical Lab Science',
     description: 'Selected for the week-long Medical Laboratory Science Summer Immersion Program at UTMB. Hands-on training in microbiology, hematology, chemistry, blood bank, and molecular biology lab procedures.',
