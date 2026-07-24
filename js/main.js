@@ -62,7 +62,7 @@ function initHeroCounters() {
   observeVisibility(countEls[0]?.closest('.hero__stats'), () => {
     animateCount(countEls[0], 12, 1200);
     animateCount(countEls[1], 334, 1800);
-    animateCount(countEls[2], 9, 1000);
+    animateCount(countEls[2], 8, 1000);
   });
 }
 
