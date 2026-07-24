@@ -1176,8 +1176,8 @@ main {
   font-size: var(--font-size-sm);
   font-weight: 500;
   cursor: pointer;
-  border-radius: var(--radius-full);
-  transition: border-color var(--transition-base), color var(--transition-base), background var(--transition-base), padding var(--transition-base), gap var(--transition-base), border-radius var(--transition-base);
+  border-radius: var(--radius-md);
+  transition: border-color var(--transition-base), color var(--transition-base), background var(--transition-base), padding var(--transition-base), gap var(--transition-base), width var(--transition-base), height var(--transition-base);
   margin-bottom: var(--spacing-8);
   text-transform: uppercase;
   letter-spacing: 0.5px;
@@ -1196,12 +1196,15 @@ main {
   }
 
   &.back-btn--compact {
-    padding: var(--spacing-2);
+    width: 40px;
+    height: 40px;
+    padding: 0;
     gap: 0;
+    justify-content: center;
     background: color-mix(in srgb, var(--color-background) 40%, transparent);
     border-color: transparent;
     color: var(--color-text-muted);
-    min-width: 0;
+    font-size: var(--font-size-base);
 
     span {
       display: none;
