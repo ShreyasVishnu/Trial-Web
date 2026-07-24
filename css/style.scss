@@ -1109,11 +1109,11 @@ main {
 .branch-grid {
   display: grid;
   gap: var(--spacing-6);
-  max-width: 900px;
+  max-width: 960px;
   margin: 0 auto;
 
   @media (min-width: 640px) {
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
   }
 }
 

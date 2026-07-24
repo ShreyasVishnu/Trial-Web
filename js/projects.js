@@ -72,6 +72,12 @@ const extracurriculars = [
     tag: 'UTMB · Clinical Lab Science',
     description: 'Selected for the week-long Medical Laboratory Science Summer Immersion Program at UTMB. Hands-on training in microbiology, hematology, chemistry, blood bank, and molecular biology lab procedures.',
     icon: '🧪'
+  },
+  {
+    title: 'Science & Engineering Fair of Houston',
+    tag: 'Research · 2-time Qualifier',
+    description: 'Presented independent BSL2 research at SEFH in 2025 (drug-resistant Salmonella study) and 2026 (lung cancer cytotoxicity study). Advanced through district-level competition both years.',
+    icon: '🏆'
   }
 ];
 
@@ -135,6 +141,57 @@ const volunteerActivities = [
   }
 ];
 
+const awards = [
+  {
+    title: '2nd Place — Biology & Microbiology',
+    tag: 'District Science Fair · 2026',
+    description: 'Won 2nd Place at the district level for the lung cancer cytotoxicity study on STS-induced stress in A549 cells. Qualified for the Science and Engineering Fair of Houston.',
+    icon: '🥈'
+  },
+  {
+    title: 'SEFH Qualifier (x2)',
+    tag: 'Science Fair · 2025 & 2026',
+    description: 'Qualified for the Science and Engineering Fair of Houston two consecutive years — first for the drug-resistant Salmonella study, then for the lung cancer cytotoxicity study.',
+    icon: '🎯'
+  },
+  {
+    title: '4th Place — Biology & Microbiology',
+    tag: 'District Science Fair · 2025',
+    description: 'Placed 4th at district level for the Ivacaftor–Pentamidine drug repurposing study against drug-resistant Salmonella Typhimurium.',
+    icon: '🏅'
+  },
+  {
+    title: 'CCISD Superintendent Scholar',
+    tag: 'Academics · 2025',
+    description: 'Recognized as a Superintendent Scholar by Clear Creek Independent School District for academic excellence.',
+    icon: '📚'
+  },
+  {
+    title: '2nd Place — Engineering Category',
+    tag: 'District Science Fair · 2023',
+    description: 'Earned 2nd Place in the Engineering category at the district science fair.',
+    icon: '⚙️'
+  },
+  {
+    title: 'Archery District Champion (x2)',
+    tag: 'Athletics · 2023 & 2024',
+    description: 'Two-time District 1st Place Champion in archery, demonstrating consistency, focus, and competitive performance.',
+    icon: '🏹'
+  },
+  {
+    title: 'VEX Robotics Worlds Qualifier',
+    tag: 'Robotics · 2023',
+    description: 'Qualified for the VEX Robotics World Championship after competing at regional and state levels.',
+    icon: '🤖'
+  },
+  {
+    title: '3rd Place — Mixed Épée Fencing',
+    tag: 'Athletics · 2023',
+    description: 'Earned 3rd Place in Mixed Épée Fencing, developing discipline, strategy, and competitive resilience.',
+    icon: '⚔️'
+  }
+];
+
 function renderCards(containerId, items, animClass) {
   const container = $(`#${containerId}`);
   if (!container) return;
@@ -152,10 +209,11 @@ export function renderCategoryCards(containerId, category) {
   const map = {
     activities: { data: extracurriculars, anim: 'card--activities' },
     research: { data: researchProjects, anim: 'card--research' },
-    volunteer: { data: volunteerActivities, anim: 'card--volunteer' }
+    volunteer: { data: volunteerActivities, anim: 'card--volunteer' },
+    awards: { data: awards, anim: 'card--activities' }
   };
   const cfg = map[category];
   if (cfg) renderCards(containerId, cfg.data, cfg.anim);
 }
 
-export { extracurriculars, researchProjects, volunteerActivities };
+export { extracurriculars, researchProjects, volunteerActivities, awards };

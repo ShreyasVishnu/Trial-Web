@@ -14,7 +14,8 @@ export function initExtracurriculars() {
   const meta = {
     activities: { title: 'Activities', subtitle: 'Clubs, teams, and leadership' },
     research: { title: 'Research', subtitle: 'BSL2 lab — 2 years of independent investigation' },
-    volunteer: { title: 'Volunteer & Community Service', subtitle: 'Giving back to my community' }
+    volunteer: { title: 'Volunteer & Community Service', subtitle: 'Giving back to my community' },
+    awards: { title: 'Awards & Honors', subtitle: 'Science fair, athletics, and academic recognition' }
   };
 
   function showCategory(category) {
