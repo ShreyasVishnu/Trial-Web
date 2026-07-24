@@ -21,6 +21,7 @@ export function initExtracurriculars() {
   function showCategory(category) {
     window.scrollTo({ top: 0, behavior: 'instant' });
     backBtn.classList.remove('back-btn--compact');
+    if (!scrollCleanup) initBackButtonScroll();
     const cards = $$('.branch-card', branch);
 
     cards.forEach((card, i) => {
