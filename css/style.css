@@ -1480,7 +1480,7 @@ main.page-exit--backward {
   gap: 0;
   justify-content: center;
   background: color-mix(in srgb, var(--color-background) 40%, transparent);
-  border-color: transparent;
+  border-color: var(--color-border);
   color: var(--color-text-muted);
   font-size: var(--font-size-base);
 }
