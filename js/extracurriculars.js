@@ -19,6 +19,8 @@ export function initExtracurriculars() {
   };
 
   function showCategory(category) {
+    window.scrollTo({ top: 0, behavior: 'instant' });
+    backBtn.classList.remove('back-btn--compact');
     const cards = $$('.branch-card', branch);
 
     cards.forEach((card, i) => {
@@ -57,6 +59,7 @@ export function initExtracurriculars() {
   let scrollCleanup = null;
 
   function showBranch() {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
     content.classList.remove('content-visible');
     if (scrollCleanup) { scrollCleanup(); scrollCleanup = null; }
 
